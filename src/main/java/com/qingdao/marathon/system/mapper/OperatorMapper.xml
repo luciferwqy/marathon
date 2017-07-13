@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qingdao.marathon.system.mapper.OperatorMapper">
+	<!-- Result Map -->
+	<resultMap id="operator" type="com.qingdao.marathon.system.model.Operator">
+		<result column="optid" property="optid" />
+		<result column="badge" property="badge" />
+		<result column="roleid" property="roleid" />
+		<result column="roleName" property="roleName" />
+		<result column="optName" property="optName" />
+		<result column="tel" property="tel" />
+		<result column="mail" property="mail" />
+		<result column="password" property="password" />
+		<result column="createTime" property="createTime" />
+		<result column="updateTime" property="updateTime" />
+		<result column="opt" property="opt" />
+	</resultMap>
+
+	<!-- 获取角色菜单 -->
+	<select id="selectByLoginInfo" resultMap="operator">
+		select ao.*,r.roleid,r.roleName from auth_operator ao left join auth_operatorrole ro 
+		on ao.optid=ro.operatorid left join auth_role r on ro.roleid=r.roleid 
+		where ao.badge = #{userName} and ao.password=#{password};
+	</select>
+
+	<select id="queryByList" resultMap="operator">
+		select o.*,r.roleid,r.roleName from auth_operator o left join auth_operatorrole ro 
+		on o.optid=ro.operatorid left join auth_role r on ro.roleid=r.roleid where r.roleid !='1'
+		<if test="optid != null and optid !=''">
+			and o.optid = #{optid,jdbcType=NUMERIC}
+		</if>
+		<if test="badge != null and badge !=''">
+			and o.badge = #{badge,jdbcType=VARCHAR}
+		</if>
+		<if test="optName != null and optName !=''">
+			and o.optName like CONCAT('%',#{optName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="tel != null and tel !=''">
+			and o.tel = #{tel,jdbcType=VARCHAR}
+		</if>
+		<if test="mail != null and mail !=''">
+			and o.mail = #{mail,jdbcType=VARCHAR}
+		</if>
+		<if test="password != null and password !=''">
+			and o.password = #{password,jdbcType=VARCHAR}
+		</if>
+		<if test="opt != null and opt !=''">
+			and o.opt = #{opt,jdbcType=VARCHAR}
+		</if>
+		<if test="roleId != null and roleId !=''">
+			and r.roleid = #{roleId,jdbcType=VARCHAR}
+		</if>
+		<if test="roleList != null">
+			and r.roleid in
+			<foreach collection="roleList" item="roleid" index="index"
+				open="(" close=")" separator=",">
+				#{roleid,jdbcType=VARCHAR}
+			</foreach>
+		</if>
+		order by o.createTime
+	</select>
+	
+	<delete id="delete">
+		delete from auth_operator where optid = #{optid}
+	</delete>
+	
+	<insert id="add" useGeneratedKeys="true" keyProperty="optid"
+		parameterType="Object">
+		insert into auth_operator (badge,optName,tel,mail,password,createTime,opt) 
+		values (
+			#{badge,jdbcType=VARCHAR},
+			#{optName,jdbcType=VARCHAR},
+			#{tel,jdbcType=VARCHAR},
+			#{mail,jdbcType=VARCHAR},
+			#{password,jdbcType=VARCHAR},
+			now(),
+			#{opt,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="update" parameterType="Object">
+		update auth_operator set updateTime = now() 
+		<if test="optName != null">
+			,optName = #{optName}
+		</if>
+		<if test="tel != null">
+			,tel = #{tel}
+		</if>
+		<if test="mail != null">
+			,mail = #{mail}
+		</if>
+		<if test="password != null">
+			,password = #{password}
+		</if>
+		<if test="opt != null">
+			,opt = #{opt}
+		</if>
+		where optid = #{optid}
+	</update>
+	
+	<select id="selectBadge" resultMap="operator">
+		select * from auth_operator where badge = #{badge}
+	</select>
+	
+	<update id="updateRoleOpt" parameterType="Object">
+		update auth_operatorrole set updatetime = now(),opt=#{opt},roleid=#{roleid} where operatorid=#{optid}
+	</update>
+	
+	<insert id="addRoleOpt" parameterType="Object">
+		insert into auth_operatorrole (operatorid,roleid,createtime,opt) 
+		values (
+			#{optid,jdbcType=VARCHAR},
+			#{roleid,jdbcType=VARCHAR},
+			now(),
+			#{opt,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<delete id="delOptBindRole" parameterType="Object">
+		delete from auth_operatorrole where operatorid = #{optid}
+	</delete>
+
+</mapper>

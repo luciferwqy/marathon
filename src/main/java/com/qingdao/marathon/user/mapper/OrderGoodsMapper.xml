@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qingdao.marathon.user.mapper.OrderGoodsMapper" >
+  <resultMap id="BaseResultMap" type="com.qingdao.marathon.user.model.OrderGoods" >
+    <id column="goodsId" property="goodsId" jdbcType="NUMERIC"/>
+    <result column="orderId" property="orderId" jdbcType="VARCHAR" />
+    <result column="quantity" property="quantity" jdbcType="NUMERIC" />
+    <result column="size" property="size" jdbcType="VARCHAR" />
+    <result column="color" property="color" jdbcType="VARCHAR" />
+    <result column="style" property="style" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="VARCHAR" />
+    <result column="goodsName" property="goodsName" jdbcType="VARCHAR" />
+    <result column="style" property="style" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <insert id="addOrderGoods" parameterType="Object" useGeneratedKeys="true" keyProperty="goodsId">
+  	insert into ordergoods (orderId,quantity,size,color,style,remark,goodsName,amount) values
+  	(
+  		#{orderId},#{quantity},#{size},#{color},
+  		#{style},#{remark},#{goodsName},#{amount}
+  	)
+  </insert>
+  
+  <select id="queryGoodsList" parameterType="Object" resultMap="BaseResultMap">
+  	select * from ordergoods where orderId = #{orderId}
+  </select>
+  
+  	<update id="updateOrderId" parameterType="Object">
+		update ordergoods set orderid = #{newOrderId} where orderid = #{orderId}
+	</update>
+  
+</mapper>

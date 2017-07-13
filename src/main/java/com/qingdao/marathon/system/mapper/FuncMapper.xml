@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qingdao.marathon.system.mapper.FuncMapper">
+	<!-- Result Map -->
+	<resultMap id="authInfo" type="com.qingdao.marathon.system.model.AuthInfo">
+		<result column="funcId" property="funcId" />
+		<result column="name" property="name" />
+		<result column="url" property="url" />
+		<result column="tag" property="tag" />
+		<result column="parentId" property="parentId" />
+		<result column="privilege" property="privilege" />
+	</resultMap>
+
+	<!-- resultMap -->
+	<resultMap type="com.qingdao.marathon.system.model.FuncEntity" id="funcEntity">
+		<result column="funcId" property="funcId" />
+		<result column="name" property="name" />
+		<result column="url" property="url" />
+		<result column="funcGroupId" property="funcGroupId" />
+		<result column="parentId" property="parentId" />
+		<result column="tag" property="tag" />
+		<result column="createTime" property="createTime" />
+		<result column="updateTime" property="updateTime" />
+		<result column="opt" property="opt" />
+	</resultMap>
+	
+	<insert id="add" useGeneratedKeys="true" keyProperty="funcId"
+		parameterType="Object">
+		insert into auth_func (name,url,funcGroupId,parentId,tag,createTime,opt) 
+		values (
+			#{name,jdbcType=VARCHAR},
+			#{url,jdbcType=VARCHAR},
+			#{funcGroupId,jdbcType=VARCHAR},
+			#{parentId,jdbcType=VARCHAR},
+			#{tag,jdbcType=VARCHAR},
+			now(),
+			#{opt,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<select id="queryByList" resultMap="funcEntity">
+		select * from auth_func
+		<where>
+			<if test="funcId != null and funcId !=''">
+				and funcId = #{funcId,jdbcType=NUMERIC}
+			</if>
+			<if test="name != null and name != ''">
+				and name like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="url != null and url != ''">
+				and url like CONCAT('%',#{url,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="funcGroupId != null and funcGroupId !=''">
+				and funcGroupId = #{orderId}
+			</if>
+			<if test="startTime != null and startTime != ''">
+				and updateTime &gt;= #{startTime}
+			</if>
+			<if test="endTime != null and endTime != ''">
+				and updateTime &lt;= #{endTime}
+			</if>
+		</where>
+		order by updateTime desc
+	</select>
+	
+	<select id="queryById" resultMap="funcEntity">
+		select * from auth_func where funcid = #{funcid}
+	</select>
+
+
+	<select id="queryByParams" resultMap="funcEntity">
+		select * from auth_func
+		<where>
+			<if test="funcId != null and funcId !=''">
+				and funcId = #{funcId,jdbcType=NUMERIC}
+			</if>
+			<if test="name != null and name != ''">
+				and name like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="url != null and url != ''">
+				and url like CONCAT('%',#{url,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="funcGroupId != null and funcGroupId !=''">
+				and funcGroupId = #{orderId}
+			</if>
+			<if test="startTime != null and startTime != ''">
+				and updateTime &gt;= #{startTime}
+			</if>
+			<if test="endTime != null and endTime != ''">
+				and updateTime &lt;= #{endTime}
+			</if>
+		</where>
+		order by updateTime desc
+	</select>
+
+	<update id="update" parameterType="Object">
+		update auth_func set updateTime = now()
+		<if test="name != null">
+			,name = #{name}
+		</if>
+		<if test="url != null">
+			,url = #{url}
+		</if>
+		<if test="tag != null">
+			,tag = #{tag}
+		</if>
+		<if test="parentId != null">
+			,parentId = #{parentId}
+		</if>
+		<if test="funcGroupId != null">
+			,funcGroupId = #{funcGroupId}
+		</if>
+		<if test="opt != null">
+			,opt = #{opt}
+		</if>
+		where funcId=#{funcId}
+	</update>
+
+	<select id="queryFunc" resultMap="funcEntity">
+		select * from auth_func where 1=1 
+		<if test="isMain == 'false'">
+			<if test="funcId != null and funcId !=''">
+				and parentId = #{funcId}
+			</if>
+			<if test="funcId == null or funcId ==''">
+				and parentId is null or parentId = ''
+			</if>
+			<if test="name != null and name !=''">
+				and name like CONCAT('%',#{name,jdbcType=VARCHAR},'%') and parentId is not null
+			</if>
+		</if>
+		<if test="isMain == 'true'">
+			<if test="name != null and name !=''">
+				and name like CONCAT('%',#{name,jdbcType=VARCHAR},'%') and (parentId is null or parentId = '')
+			</if>
+			<if test="name == null or name ==''">
+				and parentId is null or parentId = ''
+			</if>
+		</if>
+	</select>
+
+	<delete id="delFunc">
+		delete from auth_func where funcId = #{funcId}
+	</delete>
+
+	<delete id="delFuncByParentId">
+		delete from auth_func where parentId = #{funcId}
+	</delete>
+
+	<!-- 获取角色菜单 -->
+	<select id="queryFuncByOptId" resultMap="authInfo">
+		select f.*,rf.privilege
+		from auth_func f left join auth_rolefunc rf on rf.funcid = f.funcid
+		where rf.roleid in (select opt.roleid from auth_operatorrole opt left join auth_role ao on 
+		opt.roleid=ao.roleid where opt.operatorid = #{id} and ao.roleState = '1') order by f.parentid,f.funcid;
+	</select>
+	
+	<select id="queryFuncByRoleId" resultMap="authInfo">
+		select f.*,rf.privilege
+		from auth_func f left join auth_rolefunc rf on rf.funcid = f.funcid
+		where rf.roleid =#{roleid}
+	</select>
+	
+	<select id="queryAllFunc" resultMap="authInfo">
+		select * from auth_func
+	</select>
+</mapper>

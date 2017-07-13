@@ -1,0 +1,513 @@
+body {
+    font-size: 12px;
+}
+
+iframe{
+	width:100%;
+	height:calc(100% - 5px);
+}
+
+object{
+	display:none;
+}
+
+[class*='col-']{
+	padding:0 10px;
+}
+
+table>tbody>tr>td, 
+table>tbody>tr>th, 
+table>tfoot>tr>td, 
+table>tfoot>tr>th, 
+table>thead>tr>td, 
+table>thead>tr>th {
+   vertical-align: middle;
+}
+
+table>tbody>tr>td .btn, 
+table>tbody>tr>th .btn, 
+table>tfoot>tr>td .btn, 
+table>tfoot>tr>th .btn, 
+table>thead>tr>td .btn, 
+table>thead>tr>th .btn {
+   margin:0 3px;
+}
+
+table>tbody>tr>td .input-group .btn, 
+table>tbody>tr>th .input-group .btn, 
+table>tfoot>tr>td .input-group .btn, 
+table>tfoot>tr>th .input-group .btn, 
+table>thead>tr>td .input-group .btn, 
+table>thead>tr>th .input-group .btn {
+   margin:0;
+}
+
+input[type="checkbox"]{
+	min-width:18px;
+	min-height:18px;
+}
+
+td input[type="text"],
+td select,
+td .input-width{
+	max-width:280px;
+}
+
+td[colspan] input[type="text"],
+td[colspan] select,
+td[colspan] .input-width{
+	max-width:inherit;
+}
+
+th .btn,
+td .btn{
+   padding:3px 8px;	
+}
+
+th .input-group.input-width>.input-group-btn>.btn,
+td .input-group.input-width>.input-group-btn>.btn{
+   padding:6px 12px;	
+}
+
+.fa-fw {
+  width: 1em;
+}
+
+.btn.active:active, 
+.btn.active:visited, 
+.btn.active.focus, 
+.btn:active, 
+.btn:visited, 
+.btn.focus,
+a:active, 
+a:visited, 
+a:focus{
+  outline:none;
+}
+
+.loading{  
+    width:160px;  
+    height:56px;  
+    position: absolute;  
+    top:30%;  
+    left:50%;  
+    margin-left:-80px;
+    line-height:56px;  
+    color:#fff;  
+    padding-left:60px;  
+    font-size:13px;  
+    background: #000 url(/img/loader.gif) no-repeat 10px 50%;  
+    opacity: 0.7;  
+    z-index:9999;  
+    -moz-border-radius:20px;  
+    -webkit-border-radius:20px;  
+    border-radius:20px;  
+    filter:progid:DXImageTransform.Microsoft.Alpha(opacity=70);  
+} 
+
+.form-control {
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555;
+    font-size: 12px;
+    height: 34px;
+    line-height: 1.42857;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    width: auto;
+    display:inline;
+}
+ 
+ 
+.container-fluid{
+    font-family:"微软雅黑";
+    font-size:12px;
+}
+ 
+.breadcrumb{
+	margin:0 -15px;
+	background-color:#eee;
+}
+.container-fluid .row{
+    padding:0;
+} 
+
+
+.breadcrumb li,
+.breadcrumb li.active{
+	color:#337ab7;
+}
+
+.breadcrumb li:first-child{
+	font-size:14px;
+}
+
+.breadcrumb li+li:before{
+	font-size:14px;
+	padding:0;
+	color:#333;
+}
+
+.form-group{
+    width:100%;
+    float:left;
+    margin-top:10px;
+    margin-bottom:10px;
+}
+.form-group.form-group-2{
+    width: 100%;
+}
+@media (min-width: 768px){
+   .form-group{
+      width: 50%;
+   }
+   .form-group.form-group-2{
+      width: 100%;
+   }
+}
+@media (min-width: 992px){
+   .form-group{
+      width: 33.33333333%;
+   }
+   .form-group.form-group-2{
+      width: 66.6666666%;
+   }	
+}
+@media (min-width: 1200px){
+   .form-group{
+      width: 25%;
+   }
+   .form-group.form-group-2{
+      width: 50%;
+   }
+}
+
+
+.form-group input,
+.form-group .btn,
+.form-group select{
+	height:34px;
+}
+
+.form-group .input-group-addon{
+	height:32px;
+}
+
+.form-group.form-group-half{
+	width:50%;
+}
+.form-group-half:nth-of-type(odd){
+	padding-right:12px;
+}
+.form-group-half:nth-of-type(even){
+	padding-left:12px;
+}
+
+
+/* ----------------------- 查询模块设置 --------------------------- */
+.row{
+    padding:0 1%;
+    margin:10px 0 0 0;
+}
+
+.row .row,
+[class^='col-'] [class^='col-']{
+	margin:0;
+    padding:0;
+}
+
+.form-group label{
+    font-family:"微软雅黑";
+    font-weight:600;
+    width:80px;
+    text-align:right;
+    float:left;
+    margin-right:5px;
+    padding-top:6px;
+    height:20px;
+}
+
+.form-group .textLength2{
+	letter-spacing:41px;
+}
+
+.form-group .textLength3{
+	letter-spacing:14PX;
+}
+
+.form-group .textLength4{
+	letter-spacing:5.5px;
+}
+
+.form-group .textLength5{
+	letter-spacing:1.5px;
+}
+
+.form-group .form-control{
+    padding: 6px 2px;
+    width: calc(100% - 88px);
+    padding:0 1%;
+}
+
+.form-group .input-group{
+    width: calc(100% - 88px);
+}
+
+.form-group .input-group .form-control{
+    width: 100%;
+}
+
+.form-group input.form-control{
+    text-indent:1.5%;
+}
+
+.form-group .input-group-btn .btn{
+    padding:6px 8px;	
+}
+
+.form-group .input-group-addon{
+    font-weight:600;
+}
+
+.form-group .input-group-addon.add-on{
+    font-family:"微软雅黑";
+    font-size:12px;
+    padding:6px 8px;
+    color:#333;
+    border-top-right-radius:4px!important;
+    border-bottom-right-radius:4px!important;
+}
+
+.termHr{
+    height:0.5px;
+    margin:10px 0;
+    background-color:#ccc;
+}
+.termBtnBox{
+    height:50px;
+    padding-right:10px;
+}
+.termBtn{
+    float:right;
+    margin-left:1%;
+}
+
+
+
+/* -----------------------数据表格页面--------------------------- */
+
+.panel {
+    margin-bottom:5px;
+}
+.panel-default{
+    padding:1%;
+}
+
+
+/*面板上按钮设置（如打印，新增）*/
+.panel-btn-div {
+    margin-top:2px;
+}
+.panel-btn-div>.btn,
+.panel-btn-div>button,
+.panel-btn{
+    padding:6px;
+    margin-left:3px;
+    margin-bottom:5px;
+}
+
+
+/*面板标题栏*/
+.panel-heading{
+    padding: 10px 10px 10px 15px;
+    height:50px;
+    border:1px solid #ddd;
+    position:relative;
+}
+.panel-h3{
+    font-size:16px;
+    font-family:'微软雅黑';
+    padding-top:5px;
+    font-weight:bold;
+    float:left
+}
+
+.panel-h3>i{
+	font-size:18px;
+	vertical-align:middle;
+}
+
+.panel-heading>.btn{
+	height: 32px;
+	float:right;
+	margin-top:-2px;
+	margin-right:3px;
+}
+
+.panel-heading>.btn-768-search{
+	display:none;
+}
+
+.control>.btn>i.fa-fw:before{
+	font-size:16px;
+    vertical-align:baseline;
+}
+
+
+/*面板主体内容*/
+.panel-body{
+    padding:0;
+    border:solid 1px #ddd!important;
+}
+
+.panel-bod.tablee-responsive{
+	width:100%;
+	overflow:auto;
+}
+
+.panel-body.table-responsive>table{
+	min-width:100%;
+}
+
+.panel-body.table-responsive>table+table{
+	border-top: 2px solid #ddd!important;
+}
+
+.panel-body.table-responsive>table>thead>tr>th{
+	border-bottom:1px solid #ddd;
+	height:36px; /* 相当于设置了 min-height */
+}
+
+.panel-body.table-responsive>table>thead>tr.caption>th{
+	color:red;
+	margin-left:1%;
+    text-align:left;
+}
+
+.panel-body.table-responsive>table>thead>tr>th>label{
+	margin-bottom:0;
+}
+
+.panel-body.table-responsive>table>tbody>tr>td{
+	border-bottom:1px solid #ddd;
+	height:34px; /* 相当于设置了 min-height */
+}
+
+/* 使得表格数据若超出范围，显示滚动条 */
+.panel-body.table-responsive>table>tbody>tr>td,
+.panel-body.table-responsive>table>tbody>tr>th,
+.panel-body.table-responsive>table>tfoot>tr>td,
+.panel-body.table-responsive>table>tfoot>tr>th,
+.panel-body.table-responsive>table>thead>tr>td,
+.panel-body.table-responsive>table>thead>tr>th{
+    text-align:left;
+    white-space:nowrap;
+    vertical-align:middle;
+}
+
+/* 使得表格数据若超出范围，显示滚动条 */
+.table-responsive>table>tbody>tr>td.maxWidth,
+.table-responsive>table>tbody>tr>th.maxWidth,
+.table-responsive>table>tfoot>tr>td.maxWidth,
+.table-responsive>table>tfoot>tr>th.maxWidth,
+.table-responsive>table>thead>tr>td.maxWidth,
+.table-responsive>table>thead>tr>th.maxWidth{
+    white-space:normal;  
+    word-wrap:break-word;
+    word-break:break-all;
+}
+
+
+/* ----------------------- 分页页数css设置-------------------------- */
+.pagination {
+    margin: 10px 0 0 0;
+    line-height:normal;
+}
+.pagination.left{
+    padding-left:6px;
+    border-color: #337ab7;
+}
+.pagination>li>a {
+	height:27px;
+    padding: 5px 8px;
+    margin-bottom:4px;
+    border: 1px solid #ccc;
+}
+.pagination>li:last-child>a {
+    padding: 3px 8px 3px 8px;
+}
+
+
+/* ----------------------- 模态框(弹出层)属性设置---------------------------- */
+
+.modal-dialog{
+    margin:auto;
+    width:90%;
+    height:96%;
+    margin-top:1%;
+}
+
+
+.modal-content{
+    height:100%;
+}
+
+/* --------- 模态框 header 部分-----------  */
+.modal-header{
+    font-family:"微软雅黑";
+    font-size:14px;
+    border-bottom:1px solid #bbb;
+    height:40px;
+    padding:8px 15px;
+}
+
+
+/* --------- 模态框 body 部分-----------  */
+.modal-body{
+    width:100%;
+    height:calc(100% - 80px );
+    padding:8px;
+}
+
+.termTable>tbody>tr>td{
+	padding:10px 5px;
+	font-size: 11px;
+	min-width:85px;
+    white-space:normal;  
+    word-wrap:break-word;
+    word-break:break-all;
+    vertical-align:middle;
+}
+
+.termTable>tbody>tr>td:nth-child(odd){
+	text-align:center;
+}
+
+.termTable>tbody>tr>td[colspan]>.btn{
+	float:right;
+	margin-right:5px;
+}
+
+.termTable>tbody>tr>td>label{
+	margin:0;
+}
+
+td .input-width{
+	width:100%;
+}
+
+
+/* --------- 模态框 footer 部分-----------  */
+.modal-footer{
+    border-top:1px solid #bbb;
+    padding-top:4px;
+    padding-bottom:4px;
+    height:40px;
+} 
+.modal-footer .btn{
+    padding:4px 10px;
+}
+
+/* --------- 其它 -----------  */

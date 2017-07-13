@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qingdao.marathon.system.mapper.MatchMngMapper">
+	<!-- Result Map -->
+	<resultMap id="authInfo" type="com.qingdao.marathon.system.model.AuthInfo">
+		<result column="funcId" property="funcId" />
+		<result column="name" property="name" />
+		<result column="url" property="url" />
+		<result column="tag" property="tag" />
+		<result column="parentId" property="parentId" />
+		<result column="privilege" property="privilege" />
+	</resultMap>
+
+	<!-- resultMap -->
+	<resultMap type="com.qingdao.marathon.system.model.MatchEntity" id="matchEntity">
+		<result column="matchId" property="matchId" />
+		<result column="matchName" property="matchName" />
+		<result column="startTime" property="startTime" />
+		<result column="regDeadline" property="regDeadline" />
+		<result column="state" property="state" />
+		<result column="createTime" property="createTime" />
+		<result column="updateTime" property="updateTime" />
+		<result column="opt" property="opt" />
+	</resultMap>
+	
+	<insert id="add" useGeneratedKeys="true" keyProperty="matchId"
+		parameterType="Object">
+		insert into marathon.`match` (matchName,startTime,regDeadline,state,createTime,updateTime,opt) 
+		values (
+			#{matchName,jdbcType=VARCHAR},
+			#{startTime,jdbcType=VARCHAR},
+			#{regDeadline,jdbcType=VARCHAR},
+			#{state,jdbcType=VARCHAR},
+			now(),
+			now(),
+			#{opt,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="update" parameterType="Object">
+		update marathon.`match` set updateTime = now()
+		<if test="matchName != null and matchName != ''">
+			,matchName = #{matchName}
+		</if>
+		<if test="startTime != null and startTime != ''">
+			,startTime = #{startTime}
+		</if>
+		<if test="regDeadline != null and regDeadline != ''">
+			,regDeadline = #{regDeadline}
+		</if>
+		<if test="state != null and state != ''">
+			,state = #{state}
+		</if>
+		<if test="opt != null">
+			,opt = #{opt}
+		</if>
+		where matchId=#{matchId}
+	</update>
+
+	<select id="queryMatch" resultMap="matchEntity">
+		select * from marathon.`match`
+	</select>
+
+	<delete id="delMatch">
+		delete from marathon.`match` where matchId = #{matchId}
+	</delete>
+
+	<delete id="delMatchByParentId">
+		delete from matchgroup where matchId = #{matchId}
+	</delete>
+	
+	<select id="queryByParams" resultMap="matchEntity">
+		select * from marathon.`match`
+		<where>
+			<if test="matchId != null and matchId !=''">
+				and matchId = #{matchId,jdbcType=NUMERIC}
+			</if>
+		</where>
+		order by matchId
+	</select>
+
+	<!-- 获取角色菜单 -->
+	<select id="queryFuncByOptId" resultMap="authInfo">
+		select f.*,rf.privilege
+		from auth_func f left join auth_rolefunc rf on rf.funcid = f.funcid
+		where rf.roleid in (select opt.roleid from auth_operatorrole opt left join auth_role ao on 
+		opt.roleid=ao.roleid where opt.operatorid = #{id} and ao.roleState = '1') order by f.parentid,f.funcid;
+	</select>
+	
+	<select id="queryFuncByRoleId" resultMap="authInfo">
+		select f.*,rf.privilege
+		from auth_func f left join auth_rolefunc rf on rf.funcid = f.funcid
+		where rf.roleid =#{roleid}
+	</select>
+	
+	<select id="queryAllFunc" resultMap="authInfo">
+		select * from auth_func
+	</select>
+	
+	<select id="queryById" resultMap="matchEntity">
+		select * from marathon.`match`
+		where matchId = #{matchId}
+	</select>
+</mapper>

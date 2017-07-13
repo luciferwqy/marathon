@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qingdao.marathon.user.mapper.MarathonRaceMapper">
+	<resultMap id="BaseResultMap" type="com.qingdao.marathon.user.model.MarathonRace">
+		<id column="account" property="account" jdbcType="VARCHAR" />
+		<result column="marathonName" property="marathonName" jdbcType="VARCHAR" />
+		<result column="achievement" property="achievement" jdbcType="VARCHAR" />
+		<result column="certificatePath" property="certificatePath"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		account, marathonName, achievement, certificatePath
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from marathonrace
+		where account = #{account,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from marathonrace
+		where account = #{account,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.qingdao.marathon.user.model.MarathonRace">
+		insert into marathonrace (account, marathonName, achievement,
+		certificatePath)
+		values (#{account,jdbcType=VARCHAR}, #{marathonName,jdbcType=VARCHAR},
+		#{achievement,jdbcType=VARCHAR},
+		#{certificatePath,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.qingdao.marathon.user.model.MarathonRace">
+		insert into marathonrace
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="account != null">
+				account,
+			</if>
+			<if test="marathonName != null">
+				marathonName,
+			</if>
+			<if test="achievement != null">
+				achievement,
+			</if>
+			<if test="certificatePath != null">
+				certificatePath,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="account != null">
+				#{account,jdbcType=VARCHAR},
+			</if>
+			<if test="marathonName != null">
+				#{marathonName,jdbcType=VARCHAR},
+			</if>
+			<if test="achievement != null">
+				#{achievement,jdbcType=VARCHAR},
+			</if>
+			<if test="certificatePath != null">
+				#{certificatePath,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.qingdao.marathon.user.model.MarathonRace">
+		update marathonrace
+		<set>
+			<if test="marathonName != null">
+				marathonName = #{marathonName,jdbcType=VARCHAR},
+			</if>
+			<if test="achievement != null">
+				achievement = #{achievement,jdbcType=VARCHAR},
+			</if>
+			<if test="certificatePath != null">
+				certificatePath = #{certificatePath,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where account = #{account,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.qingdao.marathon.user.model.MarathonRace">
+		update marathonrace
+		set marathonName = #{marathonName,jdbcType=VARCHAR},
+		achievement = #{achievement,jdbcType=VARCHAR},
+		certificatePath = #{certificatePath,jdbcType=VARCHAR}
+		where account = #{account,jdbcType=VARCHAR}
+	</update>
+
+	<update id="addRace" parameterType="Object">
+		insert into marathonrace(account,marathonName,achievement,certificatePath)
+		values
+		(#{account},
+		#{marathonName,jdbcType=VARCHAR},
+		#{achievement,jdbcType=VARCHAR},
+		#{certificatePath,jdbcType=VARCHAR}
+		)
+		on duplicate key update 
+		<if test="marathonName != null and marathonName != ''">
+			marathonName=values(marathonName),
+		</if>
+		<if test="achievement != null and achievement != ''">
+			achievement=values(achievement)
+		</if>
+		<if test="certificatePath != null and certificatePath != ''">
+			certificatePath=values(certificatePath)
+		</if>
+	</update>
+</mapper>

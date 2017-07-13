@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qingdao.marathon.system.mapper.NewsMapper">
+	<!-- Result Map -->
+	<resultMap id="news" type="com.qingdao.marathon.system.model.NewsModel">
+		<result column="newsId" property="newsId" />
+		<result column="title" property="title" />
+		<result column="fileName" property="fileName" />
+		<result column="type" property="type" />
+		<result column="lang" property="lang" />
+		<result column="createtime" property="createtime" />
+	</resultMap>
+
+
+	<select id="queryByList" resultMap="news" parameterType="Object">
+		select * from news  where 1=1 
+		<if test="type != null and type != ''">
+			and type = #{type}
+		</if>
+		<if test="lang != null and lang != ''">
+			and lang = #{lang}
+		</if>
+		limit #{start} ,#{end}
+	</select>
+	
+	<delete id="delete" parameterType="Object">
+		delete from news where newsId = #{newsId}
+	</delete>
+	
+	<insert id="add" useGeneratedKeys="true" keyProperty="newsId"
+		parameterType="Object">
+		insert into news (title,fileName,type,lang,createtime) 
+		values (
+			#{title,jdbcType=VARCHAR},
+			#{fileName,jdbcType=VARCHAR},
+			#{type,jdbcType=VARCHAR},
+			#{lang,jdbcType=VARCHAR},
+			now()
+		)
+	</insert>
+	
+	<select id="queryCount" parameterType="Object" resultType = "java.lang.Integer">
+		select count(*) from news where 1=1 
+		<if test="type != null and type != ''">
+			and type = #{type}
+		</if>
+		<if test="lang != null and lang != ''">
+			and lang = #{lang}
+		</if>
+	</select>
+</mapper>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qingdao.marathon.user.mapper.OrderInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.qingdao.marathon.user.model.OrderInfo" >
+    <id column="orderId" property="orderId" jdbcType="NUMERIC" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="NUMERIC" />
+    <result column="expressId" property="expressId" jdbcType="VARCHAR" />
+    <result column="carrierName" property="carrierName" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="receiverName" property="receiverName" jdbcType="VARCHAR" />
+    <result column="receiverPhone" property="receiverPhone" jdbcType="VARCHAR" />
+    <result column="receiverProvince" property="receiverProvince" jdbcType="VARCHAR" />
+    <result column="receiverCity" property="receiverCity" jdbcType="VARCHAR" />
+    <result column="receiverArea" property="receiverArea" jdbcType="VARCHAR" />
+    <result column="receiverAddress" property="receiverAddress" jdbcType="VARCHAR" />
+    <result column="receiverZipCode" property="receiverZipCode" jdbcType="VARCHAR" />
+    <collection property="goodsList" ofType="com.qingdao.marathon.user.model.OrderGoods">
+    	<id column="goodsId" property="goodsId" jdbcType="NUMERIC"/>
+	    <result column="orderId" property="orderId" jdbcType="VARCHAR" />
+	    <result column="quantity" property="quantity" jdbcType="NUMERIC" />
+	    <result column="size" property="size" jdbcType="VARCHAR" />
+	    <result column="color" property="color" jdbcType="VARCHAR" />
+	    <result column="style" property="style" jdbcType="VARCHAR" />
+	    <result column="amount" property="amount" jdbcType="VARCHAR" />
+    	<result column="goodsName" property="goodsName" jdbcType="VARCHAR" />
+	    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    </collection>
+  </resultMap>
+  
+	<!-- resultMap -->
+	<resultMap type="com.qingdao.marathon.user.model.OrderExportEntity" id="orderExportEntity">
+		<result column="orderid" property="orderid" />
+		<result column="account" property="account" />
+		<result column="goodsName" property="goodsName" />
+		<result column="size" property="size" />
+		<result column="color" property="color" />
+		<result column="quantity" property="quantity" />
+		<result column="receiverName" property="receiverName" />
+		<result column="receiverPhone" property="receiverPhone" />
+		<result column="receiverProvince" property="receiverProvince" />
+		<result column="receiverCity" property="receiverCity" />
+		<result column="receiverArea" property="receiverArea" />
+		<result column="receiverAddress" property="receiverAddress" />
+		<result column="carrierName" property="carrierName" />
+		<result column="expressId" property="expressId" />
+	</resultMap>
+  
+  <insert id="addOrderInfo" parameterType="Object">
+  	insert into orderinfo (orderId,account,receiverName,receiverPhone,receiverProvince,receiverCity,receiverArea,
+  	receiverAddress,receiverZipCode,createtime,remark) 
+  	values(
+  		#{orderId},#{account},#{receiverName},#{receiverPhone},#{receiverProvince},#{receiverCity},#{receiverArea},
+  	#{receiverAddress},#{receiverZipCode},now(),#{remark}
+  	)
+  </insert>
+  
+  <select id="queryByList" parameterType="Object" resultMap="BaseResultMap">
+  	select o.orderId,account,state,expressId,carrierName,receiverName,receiverPhone,receiverProvince,receiverCity,
+  	receiverArea,receiverAddress,receiverZipCode,goodsId,quantity,size,color,style,amount,goodsName
+  	 from orderinfo o left join ordergoods g on o.orderid = g.orderid  where account = #{account}
+  </select>
+  
+  <update id="update" parameterType="Object">
+  	update orderinfo set state = '1' where orderId = #{orderId}
+  </update>
+  
+  <select id="queryExport" parameterType="Object" resultMap="BaseResultMap">
+  	select o.orderId,account,state,expressId,carrierName,receiverName,receiverPhone,receiverProvince,receiverCity,
+  	receiverArea,receiverAddress,receiverZipCode,goodsId,quantity,size,color,style,amount,goodsName
+  	 from orderinfo o left join ordergoods g on o.orderid = g.orderid where 1=1
+  	<if test = "state != null and state != ''">
+  		and state = #{state}
+  	</if>
+  	<if test = "receiverProvince != null and receiverProvince != ''">
+  		and receiverProvince = #{receiverProvince}
+  	</if>
+  	<if test = "receiverCity != null and receiverCity != ''">
+  		and receiverCity = #{receiverCity}
+  	</if>
+  	<if test = "receiverArea != null and receiverArea != ''">
+  		and receiverArea = #{receiverArea}
+  	</if>
+  	order by createtime
+  </select>
+  
+  <select id="queryList" parameterType="Object" resultMap="BaseResultMap">
+  	select * from orderinfo where 1=1
+  	<if test = "orderId != null and orderId != ''">
+  		and orderId = #{orderId}
+  	</if>
+  	<if test = "state != null and state != ''">
+  		and state = #{state}
+  	</if>
+  	<if test = "receiverProvince != null and receiverProvince != ''">
+  		and receiverProvince = #{receiverProvince}
+  	</if>
+  	<if test = "receiverCity != null and receiverCity != ''">
+  		and receiverCity = #{receiverCity}
+  	</if>
+  	<if test = "receiverArea != null and receiverArea != ''">
+  		and receiverArea = #{receiverArea}
+  	</if>
+  	order by orderId desc
+  </select>
+  
+  <select id="queryOrderByParams" parameterType="Object" resultMap="orderExportEntity">
+  	select a.orderid,a.account,b.goodsName,b.size,b.color,b.quantity,
+	a.receiverName,a.receiverPhone,a.receiverProvince,a.receiverCity,
+	a.receiverArea,a.receiverAddress,ifnull(a.carrierName,'') carrierName,
+	ifnull(a.expressId,'') expressId from orderinfo a
+	inner join ordergoods b on a.orderid = b.orderid
+	where 1=1
+	<if test = "state != null and state != ''">
+  		and a.state = #{state}
+  	</if>
+	order by a.orderid
+  </select>
+	
+	<update id="updateOrderState" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+			update orderinfo
+			<set>
+				state = '2',
+				carrierName=#{item.carrierName},
+				expressId=#{item.expressId}
+			</set>
+			   where orderId=#{item.orderid}
+		</foreach>
+	</update>
+	
+	<select id="queryByOrderId" parameterType="Object" resultType="java.lang.String">
+		select state from orderinfo where orderId =#{orderId}
+	</select>
+	
+	<update id="updateOrder" parameterType="Object">
+		update orderinfo set orderid = #{newOrderId} where orderid = #{orderId}
+	</update>
+</mapper>

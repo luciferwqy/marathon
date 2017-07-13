@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qingdao.marathon.system.mapper.RoleMapper">
+	<!-- Result Map -->
+	<resultMap id="role" type="com.qingdao.marathon.system.model.RoleEntity">
+		<result column="roleid" property="roleid" />
+		<result column="roleName" property="roleName" />
+		<result column="roleState" property="roleState" />
+		<result column="createTime" property="createTime" />
+		<result column="updateTime" property="updateTime" />
+		<result column="opt" property="opt" />
+	</resultMap>
+
+
+	<select id="queryByList" resultMap="role">
+		select * from auth_role  where 1=1
+		<if test="roleid != null and roleid !=''">
+			and roleid = #{roleid,jdbcType=NUMERIC}
+		</if>
+		<if test="roleState != null and roleState !=''">
+			and roleState = #{roleState,jdbcType=NUMERIC}
+		</if>
+		<if test="roleName != null and roleName !=''">
+			and roleName like CONCAT('%',#{roleName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="noSearchSysAdmin != null and noSearchSysAdmin !=''">
+			and roleid != '1'
+		</if>
+		order by createTime
+	</select>
+	
+	<delete id="delete">
+		delete from auth_role where roleid = #{roleid}
+	</delete>
+	
+	<insert id="add" useGeneratedKeys="true" keyProperty="roleid"
+		parameterType="Object">
+		insert into auth_role (roleName,roleState,createTime,opt) 
+		values (
+			#{roleName,jdbcType=VARCHAR},
+			#{roleState,jdbcType=VARCHAR},
+			now(),
+			#{opt,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="update" parameterType="Object">
+		update auth_role set updateTime = now() 
+		<if test="roleName != null">
+			,roleName = #{roleName}
+		</if>
+		<if test="roleState != null">
+			,roleState = #{roleState}
+		</if>
+		where roleid = #{roleid}
+	</update>
+	
+	<delete id="delRoleBindFunc" parameterType="Object">
+		delete from auth_rolefunc where roleid=#{roleid}
+	</delete>
+	
+	<delete id="delRoleBindOpt" parameterType="Object">
+		delete from auth_operatorrole where roleid=#{roleid}
+	</delete>
+	
+	<insert id="addPriv" parameterType="Object">
+		insert into auth_rolefunc (roleid,funcid,privilege,createtime,opt) 
+		values(
+			#{roleid,jdbcType=VARCHAR},
+			#{funcid,jdbcType=VARCHAR},
+			#{privilege,jdbcType=VARCHAR},
+			now(),
+			#{opt,jdbcType=VARCHAR}
+		) 
+		on duplicate key update updateTime = now()
+	</insert>
+	
+</mapper>

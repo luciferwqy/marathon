@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qingdao.marathon.system.mapper.ReviewMngMapper">
+	<!-- Result Map -->
+	<resultMap id="authInfo" type="com.qingdao.marathon.system.model.AuthInfo">
+		<result column="funcId" property="funcId" />
+		<result column="name" property="name" />
+		<result column="url" property="url" />
+		<result column="tag" property="tag" />
+		<result column="parentId" property="parentId" />
+		<result column="privilege" property="privilege" />
+	</resultMap>
+
+	<!-- resultMap -->
+	<resultMap type="com.qingdao.marathon.user.model.Registration" id="registration">
+		<result column="matchId" property="matchId" />
+		<result column="account" property="account" />
+		<result column="matchName" property="matchName" />
+		<result column="auditState" property="auditState" />
+		<result column="payState" property="payState" />
+		<result column="groupId" property="groupId" />
+		<result column="groupName" property="groupName" />
+		<result column="raceOrderId" property="raceOrderId" />
+		<result column="account" property="account" />
+	</resultMap>
+
+	<!-- resultMap -->
+	<resultMap type="com.qingdao.marathon.system.model.DrawEntity" id="drawEntity">
+		<result column="matchId" property="matchId" />
+		<result column="matchName" property="matchName" />
+		<result column="groupId" property="groupId" />
+		<result column="groupName" property="groupName" />
+		<result column="startTime" property="startTime" />
+		<result column="competitionNo" property="competitionNo" />
+		<result column="createTime" property="createTime" />
+		<result column="auditState" property="auditState" />
+		<result column="payState" property="payState" />
+		<result column="name" property="name" />
+		<result column="account" property="account" />
+	</resultMap>
+	
+	<insert id="add" useGeneratedKeys="true" keyProperty="groupId"
+		parameterType="Object">
+		insert into marathon.`matchgroup` (matchId,groupName,fee,createTime,updateTime,opt) 
+		values (
+			#{matchId,jdbcType=VARCHAR},
+			#{groupName,jdbcType=VARCHAR},
+			#{fee,jdbcType=VARCHAR},
+			now(),
+			now(),
+			#{opt,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="updateAch" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+			update registration
+			<set>
+				updateTime = now(),
+				achievement=#{item.achievement},
+				ranking=#{item.ranking}
+			</set>
+			   where groupId=#{item.groupId} and matchId=#{item.matchId} and competitionNo=#{item.competitionNo}
+		</foreach>
+	</update>
+	
+	<update id="update" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+			update registration
+			<set>
+				updateTime = now(),
+				auditstate=#{item.auditState},
+				competitionNo=#{item.competitionNo},
+				raceOrderId=#{item.raceOrderId}
+			</set>
+			   where groupId=#{item.groupId} and matchId=#{item.matchId} and account=#{item.account}
+		</foreach>
+	</update>
+
+	<select id="queryDraw" resultMap="drawEntity">
+		select a.matchId,b.matchName,a.groupId,a.groupName,d.name,b.startTime,c.createtime,c.competitionNo,c.auditState,c.payState,c.account
+		from matchgroup a
+		inner join marathon.`match` b on a.matchId=b.matchId
+		inner join registration c on b.matchId = c.matchId and a.groupId = c.groupId
+		inner join personalinfo d on c.account = d.account
+		where a.groupid = #{groupId}
+		order by c.auditState desc,c.competitionNo,c.createtime
+	</select>
+	
+	<select id="queryGroupByParams" resultMap="drawEntity">
+		select a.*,b.matchName from marathon.`matchgroup` a
+		inner join marathon.`match` b on a.matchId = b.matchId
+		where 1=1
+		<if test="matchId != null and matchId != ''">
+			and a.matchId = #{matchId}
+		</if>
+		order by a.matchId,a.groupId
+	</select>
+
+	<delete id="delGroup">
+		delete from matchgroup where groupId = #{groupId}
+	</delete>
+
+	<delete id="delFuncByParentId">
+		delete from auth_func where parentId = #{funcId}
+	</delete>
+
+	<!-- 获取角色菜单 -->
+	<select id="queryFuncByOptId" resultMap="authInfo">
+		select f.*,rf.privilege
+		from auth_func f left join auth_rolefunc rf on rf.funcid = f.funcid
+		where rf.roleid in (select opt.roleid from auth_operatorrole opt left join auth_role ao on 
+		opt.roleid=ao.roleid where opt.operatorid = #{id} and ao.roleState = '1') order by f.parentid,f.funcid;
+	</select>
+	
+	<select id="queryFuncByRoleId" resultMap="authInfo">
+		select f.*,rf.privilege
+		from auth_func f left join auth_rolefunc rf on rf.funcid = f.funcid
+		where rf.roleid =#{roleid}
+	</select>
+	
+	<select id="queryAllFunc" resultMap="authInfo">
+		select * from auth_func
+	</select>
+	
+	<select id="queryById" resultMap="registration">
+		select a.* from marathon.`registration` a
+		where a.groupId = #{groupId} and a.auditState = '0'
+		order by createtime
+	</select>
+</mapper>

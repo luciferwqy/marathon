@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qingdao.marathon.user.mapper.ReceiveInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.qingdao.marathon.user.model.ReceiveInfo" >
+    <id column="receiveId" property="receiveId" jdbcType="VARCHAR" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="receiverName" property="receiverName" jdbcType="VARCHAR" />
+    <result column="receiverPhone" property="receiverPhone" jdbcType="VARCHAR" />
+    <result column="receiverProvince" property="receiverProvince" jdbcType="VARCHAR" />
+    <result column="receiverCity" property="receiverCity" jdbcType="VARCHAR" />
+    <result column="receiverArea" property="receiverArea" jdbcType="VARCHAR" />
+    <result column="receiverAddress" property="receiverAddress" jdbcType="VARCHAR" />
+    <result column="receiverZipCode" property="receiverZipCode" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <insert id="addReceiveInfo" parameterType="Object" useGeneratedKeys="true" keyProperty="receiveId">
+  	insert into receivedetail (account,receiverName,receiverPhone,receiverProvince,
+  	receiverCity,receiverArea,receiverAddress,receiverZipCode) values
+  	(
+  		#{account},#{receiverName},#{receiverPhone},#{receiverProvince},
+  		#{receiverCity},#{receiverArea},#{receiverAddress},#{receiverZipCode}
+  	)
+  </insert>
+  
+  <delete id="delete" parameterType="Object">
+  	delete from receivedetail where receiveId = #{receiveId}
+  </delete>
+  
+  <select id="queryByList" parameterType="Object" resultMap="BaseResultMap">
+  	select * from receivedetail where account = #{account}
+  </select>
+</mapper>

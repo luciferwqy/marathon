@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qingdao.marathon.user.mapper.PersonalInfoMapper">
+	<resultMap id="BaseResultMap" type="com.qingdao.marathon.user.model.PersonalInfo">
+		<id column="account" property="account" jdbcType="VARCHAR" />
+		<result column="pwd" property="pwd" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="nationality" property="nationality" jdbcType="VARCHAR" />
+		<result column="IDType" property="IDType" jdbcType="INTEGER" />
+		<result column="IDNumber" property="IDNumber" jdbcType="VARCHAR" />
+		<result column="sex" property="sex" jdbcType="VARCHAR" />
+		<result column="birthDay" property="birthDay" jdbcType="VARCHAR" />
+		<result column="mobilPhone" property="mobilPhone" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="residence" property="residence" jdbcType="VARCHAR" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="bloodType" property="bloodType" jdbcType="VARCHAR" />
+		<result column="occupation" property="occupation" jdbcType="VARCHAR" />
+		<result column="education" property="education" jdbcType="VARCHAR" />
+		<result column="university" property="university" jdbcType="VARCHAR" />
+		<result column="urgentPerson" property="urgentPerson" jdbcType="VARCHAR" />
+		<result column="urgentPhone" property="urgentPhone" jdbcType="VARCHAR" />
+		<result column="backupPhone" property="backupPhone" jdbcType="VARCHAR" />
+		<result column="backupMail" property="backupMail" jdbcType="VARCHAR" />
+		<collection property="race" ofType="com.qingdao.marathon.user.model.MarathonRace">
+			<id column="account" property="account" jdbcType="VARCHAR" />
+			<result column="marathonName" property="marathonName" jdbcType="VARCHAR" />
+			<result column="achievement" property="achievement" jdbcType="VARCHAR" />
+			<result column="certificatePath" property="certificatePath" jdbcType="VARCHAR" />
+		</collection>
+	</resultMap>
+	<select id="queryByPersonal" resultMap="BaseResultMap"
+		parameterType="com.qingdao.marathon.user.model.PersonalInfo">
+		select
+		*
+		from personalinfo p left join marathonrace m on p.account=m.account
+		where 1=1 
+		<if test="account != null">
+			and p.account = #{account,jdbcType=VARCHAR}
+		</if>
+		<if test="pwd != null">
+			and pwd = #{pwd,jdbcType=VARCHAR}
+		</if>
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from personalinfo
+		where account = #{account,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.qingdao.marathon.user.model.PersonalInfo">
+		insert into personalinfo (account, pwd, name,
+		nationality, IDType, IDNumber,
+		sex, birthDay, mobilPhone,
+		email, residence, address,
+		bloodType, occupation, education,
+		university, urgentPerson, urgentPhone,
+		backupPhone, backupMail,createtime)
+		values (#{account,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{nationality,jdbcType=VARCHAR}, #{IDType,jdbcType=INTEGER}, #{IDNumber,jdbcType=VARCHAR},
+		#{sex,jdbcType=VARCHAR}, #{birthDay,jdbcType=VARCHAR},
+		#{mobilPhone,jdbcType=VARCHAR},
+		#{email,jdbcType=VARCHAR}, #{residence,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR},
+		#{bloodType,jdbcType=VARCHAR}, #{occupation,jdbcType=VARCHAR},
+		#{education,jdbcType=VARCHAR},
+		#{university,jdbcType=VARCHAR}, #{urgentPerson,jdbcType=VARCHAR}, #{urgentPhone,jdbcType=VARCHAR},
+		#{backupPhone,jdbcType=VARCHAR}, #{backupMail,jdbcType=VARCHAR},now())
+	</insert>
+	<insert id="insertSelective" parameterType="com.qingdao.marathon.user.model.PersonalInfo">
+		insert into personalinfo 
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="account != null">
+				account,
+			</if>
+			<if test="pwd != null">
+				pwd,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="nationality != null">
+				nationality,
+			</if>
+			<if test="IDType != null">
+				IDType,
+			</if>
+			<if test="IDNumber != null">
+				IDNumber,
+			</if>
+			<if test="sex != null">
+				sex,
+			</if>
+			<if test="birthDay != null">
+				birthDay,
+			</if>
+			<if test="mobilPhone != null">
+				mobilPhone,
+			</if>
+			<if test="email != null">
+				email,
+			</if>
+			<if test="residence != null">
+				residence,
+			</if>
+			<if test="address != null">
+				address,
+			</if>
+			<if test="bloodType != null">
+				bloodType,
+			</if>
+			<if test="occupation != null">
+				occupation,
+			</if>
+			<if test="education != null">
+				education,
+			</if>
+			<if test="university != null">
+				university,
+			</if>
+			<if test="urgentPerson != null">
+				urgentPerson,
+			</if>
+			<if test="urgentPhone != null">
+				urgentPhone,
+			</if>
+			<if test="backupPhone != null">
+				backupPhone,
+			</if>
+			<if test="backupMail != null">
+				backupMail,
+			</if>
+			createtime,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="account != null">
+				#{account,jdbcType=VARCHAR},
+			</if>
+			<if test="pwd != null">
+				#{pwd,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="nationality != null">
+				#{nationality,jdbcType=VARCHAR},
+			</if>
+			<if test="IDType != null">
+				#{IDType,jdbcType=INTEGER},
+			</if>
+			<if test="IDNumber != null">
+				#{IDNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="sex != null">
+				#{sex,jdbcType=VARCHAR},
+			</if>
+			<if test="birthDay != null">
+				#{birthDay,jdbcType=VARCHAR},
+			</if>
+			<if test="mobilPhone != null">
+				#{mobilPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				#{email,jdbcType=VARCHAR},
+			</if>
+			<if test="residence != null">
+				#{residence,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				#{address,jdbcType=VARCHAR},
+			</if>
+			<if test="bloodType != null">
+				#{bloodType,jdbcType=VARCHAR},
+			</if>
+			<if test="occupation != null">
+				#{occupation,jdbcType=VARCHAR},
+			</if>
+			<if test="education != null">
+				#{education,jdbcType=VARCHAR},
+			</if>
+			<if test="university != null">
+				#{university,jdbcType=VARCHAR},
+			</if>
+			<if test="urgentPerson != null">
+				#{urgentPerson,jdbcType=VARCHAR},
+			</if>
+			<if test="urgentPhone != null">
+				#{urgentPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="backupPhone != null">
+				#{backupPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="backupMail != null">
+				#{backupMail,jdbcType=VARCHAR},
+			</if>
+			now(),
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.qingdao.marathon.user.model.PersonalInfo">
+		update personalinfo
+		<set>
+			<if test="pwd != null">
+				pwd = #{pwd,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="nationality != null">
+				nationality = #{nationality,jdbcType=VARCHAR},
+			</if>
+			<if test="IDType != null">
+				IDType = #{IDType,jdbcType=INTEGER},
+			</if>
+			<if test="IDNumber != null">
+				IDNumber = #{IDNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="sex != null">
+				sex = #{sex,jdbcType=VARCHAR},
+			</if>
+			<if test="birthDay != null">
+				birthDay = #{birthDay,jdbcType=VARCHAR},
+			</if>
+			<if test="mobilPhone != null">
+				mobilPhone = #{mobilPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				email = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="residence != null">
+				residence = #{residence,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				address = #{address,jdbcType=VARCHAR},
+			</if>
+			<if test="bloodType != null">
+				bloodType = #{bloodType,jdbcType=VARCHAR},
+			</if>
+			<if test="occupation != null">
+				occupation = #{occupation,jdbcType=VARCHAR},
+			</if>
+			<if test="education != null">
+				education = #{education,jdbcType=VARCHAR},
+			</if>
+			<if test="university != null">
+				university = #{university,jdbcType=VARCHAR},
+			</if>
+			<if test="urgentPerson != null">
+				urgentPerson = #{urgentPerson,jdbcType=VARCHAR},
+			</if>
+			<if test="urgentPhone != null">
+				urgentPhone = #{urgentPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="backupPhone != null">
+				backupPhone = #{backupPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="backupMail != null">
+				backupMail = #{backupMail,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where account = #{account,jdbcType=VARCHAR}
+	</update>
+</mapper>

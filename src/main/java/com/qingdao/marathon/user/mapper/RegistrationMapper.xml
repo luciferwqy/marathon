@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qingdao.marathon.user.mapper.RegistrationMapper" >
+  
+  <insert id="addRegistration" parameterType="Object">
+  	insert into registration (matchId,account,groupId,competitionNo,raceOrderId,
+  	createtime,remark) 
+  	values(
+  		#{matchId},#{account},#{groupId},#{competitionNo},#{raceOrderId},
+  		now(),#{remark}
+  	)
+  </insert>
+  
+  <select id="queryByRegistrationList" parameterType="Object" resultType="com.qingdao.marathon.user.model.Registration">
+  	select * from `match` m left join matchgroup g on m.matchId=g.matchId 
+  	left join registration r on m.matchId=r.matchId left join personalinfo p 
+  	on r.account=p.account where r.groupId=g.groupId
+  	and r.account = #{account} 
+  	<if test="matchId != null and matchId != ''">
+  		and m.matchId = #{matchId} and r.competitionNo = #{competitionNo}
+  	</if>
+  	<if test="matchId == null or matchId == ''">
+  		and m.state='0'
+  	</if>
+  </select>
+  
+  <update id="update" parameterType="Object">
+  	update registration set payState = '1' where raceOrderId = #{orderId}
+  </update>
+  
+  <select id="queryByOrderId" parameterType="Object" resultType="com.qingdao.marathon.user.model.Registration">
+  	select * from registration r left join matchgroup g on r.groupid=g.groupid 
+  	where r.raceOrderId=#{orderid}
+  </select>
+  
+  <update id="updateRaceOrderId" parameterType="Object">
+  	update registration set raceOrderId = #{newRaceOrderId} where raceOrderId = #{orderId}
+  </update>
+</mapper>
