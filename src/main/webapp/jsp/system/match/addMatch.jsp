@@ -73,8 +73,11 @@
 			</div>
 		</div>
 <script type="text/javascript">
-
+var sync = false;
 function submitForm() {	
+	if (sync) {
+		return;
+	}
 	var matchName = $("#matchName").val();
 	if(matchName == null || matchName == ''){
 		$.zzComfirm.alertError("请输入赛事名称",$("body"));
@@ -92,6 +95,7 @@ function submitForm() {
 	}
 	var options=$("#state option:selected");
 	var state = options.val();
+	sync = true;
 	$.ajax({
 		type : "post",
 		data : {
@@ -103,6 +107,7 @@ function submitForm() {
 		url : '${marathon}/admin/system/matchMng/saveMatch.shtml',
 		dataType:'json',
 		success : function(data) {
+			sync = false;
 			if (data.success) {
 				$.zzComfirm.alertSuccess("新增成功！",$("body"),function(){
 					window.parent.reloadTable();
@@ -113,6 +118,7 @@ function submitForm() {
 			}
 		},
 		error : function(data) {
+			sync = false;
 			$.zzComfirm.alertError("操作失败，请联系管理员！",$("body"));
 		}
 	});

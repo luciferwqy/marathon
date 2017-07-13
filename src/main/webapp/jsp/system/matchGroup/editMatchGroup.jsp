@@ -55,8 +55,11 @@
 			</div>
 		</div>
 <script type="text/javascript">
-
+var sync = false;
 function submitForm() {	
+	if (sync) {
+		return;
+	}
 	var groupName = $("#groupName").val();
 	if(groupName == null || groupName == ''){
 		$.zzComfirm.alertError("请输入分组名称",$("body"));
@@ -73,6 +76,7 @@ function submitForm() {
 		return;
 	}
 	var groupId=$("#groupId").val();
+	sync = true;
 	$.ajax({
 		type : "post",
 		data : {
@@ -84,6 +88,7 @@ function submitForm() {
 		url : '${marathon}/admin/system/matchGroupMng/updateMatchGroup.shtml',
 		dataType:'json',
 		success : function(data) {
+			sync = false;
 			if (data.success) {
 				$.zzComfirm.alertSuccess("修改成功！",$("body"),function(){
 					window.parent.reloadTable();
@@ -94,6 +99,7 @@ function submitForm() {
 			}
 		},
 		error : function(data) {
+			sync = false;
 			$.zzComfirm.alertError("操作失败，请联系管理员！",$("body"));
 		}
 	});
