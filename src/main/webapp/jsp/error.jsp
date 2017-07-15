@@ -51,11 +51,12 @@
   </head>
   <body>
      <div>
+     <input type = "hidden" value = "${msg}" >
        <p>
         <span>哎呀，你访问的页面消失了！</span>
         <span id="num">5</span>秒后返回首页！
        </p>
-      <a href="/marathon">立即返回首页</a>
+      <a href="http://bxu2344780002.my3w.com">立即返回首页</a>
      </div>
   </body>
   
@@ -75,7 +76,7 @@
 		   }
        }	
        else{
-    	   window.location.href="/marathon";
+    	   window.location.href="http://bxu2344780002.my3w.com";
     	   return;
        }
     }

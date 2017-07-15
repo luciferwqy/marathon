@@ -93,11 +93,16 @@
 									<tr>
 										<th>订单详情</th>
 										<th>订单编号</th>
+										<th>收货人</th>
+										<th>联系电话</th>
+										<th>省</th>
+										<th>市</th>
+										<th>区</th>
+										<th>地址</th>
 										<th>快递单号</th>
 										<th>快递公司</th>
 										<th>订单状态</th>
 										<th>创建时间</th>
-										<th>备注</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -198,8 +203,14 @@
 				str += list[i].orderId + "\",\"" + list[i].expressId + "\",\"" + list[i].carrierName
 				str += "\")'>详情</button></td>";
 				str += "</td><td>" + list[i].orderId;
-				str += "</td><td>" + list[i].expressId;
-				str += "</td><td>" + list[i].carrierName;
+				str += "</td><td>" + list[i].receiverName;
+				str += "</td><td>" + list[i].receiverPhone;
+				str += "</td><td>" + list[i].receiverProvince;
+				str += "</td><td>" + list[i].receiverCity;
+				str += "</td><td>" + list[i].receiverArea;
+				str += "</td><td>" + list[i].receiverAddress;
+				str += "</td><td>" + (list[i].expressId == null ? "无" : list[i].expressId);
+				str += "</td><td>" + (list[i].carrierName== null ? "无" : list[i].carrierName);
 				switch (list[i].state) {
 				case "0":
 					strCom = "未支付";
@@ -212,8 +223,7 @@
 					break;
 				}
 				str += "</td><td>" + strCom;
-				str += "</td><td>" + list[i].createtime;
-				str += "</td><td>" + list[i].remark;
+				str += "</td><td>" + (list[i].createtime== null ? "无" : list[i].createtime);
 				str += "</td></tr>";
 			}
 

@@ -15,6 +15,7 @@
     <result column="receiverArea" property="receiverArea" jdbcType="VARCHAR" />
     <result column="receiverAddress" property="receiverAddress" jdbcType="VARCHAR" />
     <result column="receiverZipCode" property="receiverZipCode" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="VARCHAR" />
     <collection property="goodsList" ofType="com.qingdao.marathon.user.model.OrderGoods">
     	<id column="goodsId" property="goodsId" jdbcType="NUMERIC"/>
 	    <result column="orderId" property="orderId" jdbcType="VARCHAR" />
