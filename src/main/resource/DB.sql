@@ -54,7 +54,9 @@ CREATE TABLE `personalinfo` (
   `remark` VARCHAR(500) NULL COMMENT '备注，审核不通过时',
   PRIMARY KEY (`matchId`, `account`),
   UNIQUE KEY(`matchId`, `competitionNo`),
-  UNIQUE KEY(`raceOrderId`)
+  UNIQUE KEY(`raceOrderId`),
+  INDEX `competitionNo_Index` (`competitionNo`),
+  INDEX `raceOrderId_Index` (`raceOrderId`)
   )ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
   
@@ -149,7 +151,8 @@ CREATE TABLE `auth_role` (
   `createtime` datetime DEFAULT NULL COMMENT '创建时间',
   `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
   `opt` varchar(20) DEFAULT NULL COMMENT '操作人',
-  PRIMARY KEY (`groupId`)
+  PRIMARY KEY (`groupId`),
+  INDEX `matchId_Index` (`matchId`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
   drop table if exists `marathon`.`news`;
@@ -179,7 +182,9 @@ CREATE TABLE `auth_role` (
   `receiverZipCode` VARCHAR(100) NULL,
   `createtime` datetime NULL,
   `remark` VARCHAR(500) NULL,
-  PRIMARY KEY (`orderid`)
+  PRIMARY KEY (`orderid`),
+  INDEX `expressId_Index` (`expressId`),
+  INDEX `account_Index` (`account`)
   )ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
   drop table if exists `marathon`.`ordergoods`;
@@ -193,7 +198,8 @@ CREATE TABLE `auth_role` (
   `amount` VARCHAR(45) NULL,
   `style` VARCHAR(100) NULL COMMENT '全程版、半程版、亲子版',
   `remark` VARCHAR(450) NULL,
-  PRIMARY KEY (`goodsid`)
+  PRIMARY KEY (`goodsid`),
+  INDEX `orderId_Index` (`orderId`)
   )ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
   drop table if exists `marathon`.`receivedetail`; 
@@ -207,7 +213,8 @@ CREATE TABLE `auth_role` (
   `receiverArea` VARCHAR(100) NULL,
   `receiverAddress` VARCHAR(450) NULL,
   `receiverZipCode` VARCHAR(100) NULL,
-  PRIMARY KEY (`receiveId`)
+  PRIMARY KEY (`receiveId`),
+  INDEX `account_Index` (`account`)
   )ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
   
@@ -234,4 +241,4 @@ insert into auth_rolefunc values('1', '9', '3', NULL, NULL, NULL);
 insert into auth_role values('1', 'sysadmin', '1', NULL, NULL, NULL);
 
 insert into auth_operatorrole values('1', '1', NULL, NULL, NULL);
-insert into auth_operator values('1', '555', 'C81E728D9D4C2F636F067F89CC14862C', 'admin', '555', '555', NULL, NULL, NULL)
+insert into auth_operator values('1', 'admin', 'C81E728D9D4C2F636F067F89CC14862C', 'admin', 'admin', 'admin', NULL, NULL, NULL)
