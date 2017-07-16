@@ -3,12 +3,16 @@ package com.qingdao.marathon.util;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 
 import com.qingdao.marathon.contants.Constants;
+import com.qingdao.marathon.logger.SysLogger;
 
 public class FTPUtil {
+	
+	public static SysLogger sysLogger = new SysLogger();
 
 	/**
 	 * * Description: 向FTP服务器上传文件 *
@@ -28,10 +32,15 @@ public class FTPUtil {
 		FTPClient ftp = new FTPClient();
 		try {
 			int reply;
+			
 			ftp.connect(Constants.FTP_IP, Constants.FTP_PORT);
+			ftp.enterLocalPassiveMode();
 			ftp.login(Constants.USERNAME, Constants.PWD);
+			ftp.enterLocalPassiveMode();
 			reply = ftp.getReplyCode();
+			sysLogger.info("ftp上传======", reply+"");
 			if (!FTPReply.isPositiveCompletion(reply)) {
+				sysLogger.info("ftp上传======", "连接失败");
 				ftp.disconnect();
 				return success;
 			}

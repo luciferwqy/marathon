@@ -179,7 +179,7 @@ public class ReviewMngController extends BaseController {
 			parms.put("groupId", groupId);
 			
 			List<AchievementEntity> ReportList = matchGroupMngService.queryAchByParams(parms);
-			nameArray = new String[]{"赛事ID","赛事名称","组别ID","组别名称","参赛者姓名","参赛者证件号","参赛编号","比赛成绩","比赛名称"};
+			nameArray = new String[]{"赛事ID","赛事名称","组别ID","组别名称","参赛者姓名","参赛者证件号","参赛编号","比赛成绩","比赛名次"};
 			colArray = new String[]{"MatchId","MatchName","GroupId","GroupName","Name","IDNumber","CompetitionNo","Achievement","Ranking"};
 			int index = 0;//表中行号
 			int sheetNum = 1;//工作表号
