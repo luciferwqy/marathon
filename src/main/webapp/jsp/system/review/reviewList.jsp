@@ -154,7 +154,8 @@
 			case "1":
 				switch (list[i].payState) {
 	   			case "0":
-					str += "</td><td><button type='button' class='btn btn-primary' onclick='postReviewCancel(\""+strCom+"\")'>取消资格</button>";
+					str += "</td><td>" ;
+					//str += "</td><td><button type='button' class='btn btn-primary' onclick='postReviewCancel(\""+strCom+"\")'>取消资格</button>";
 	   				break;
 	   			case "1":
 					str += "</td><td>" ;
