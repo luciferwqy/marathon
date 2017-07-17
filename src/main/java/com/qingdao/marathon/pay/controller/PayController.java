@@ -107,24 +107,25 @@ public class PayController {
 				if(order.getOrderId() == null || "".equals(order.getOrderId())){
 					order.setOrderId(orderId);
 					orderService.addOrder(order);
-				}else {
-					parms.put("orderId", order.getOrderId());
-					parms.put("newOrderId", orderId);
-					order.setOrderId(orderId);
-					orderService.updateOrder(parms);
 				}
+//				else {
+//					parms.put("orderId", order.getOrderId());
+//					parms.put("newOrderId", orderId);
+//					order.setOrderId(orderId);
+//					orderService.updateOrder(parms);
+//				}
 				
 				info.setTotalAmount(order.getTotalAmount());
 			}else{
 				//时分秒
-				String now = DateUtil.getNowPlusTimeMill();
+//				String now = DateUtil.getNowPlusTimeMill();
 				PersonalInfo personal = userService.getUserInfo(order.getAccount());
 				Registration r = userService.queryByOrderId(order.getOrderId());
-				String newRaceOrderId = "BM"+now+r.getCompetitionNo();
-				parms.put("orderId", order.getOrderId());
-				parms.put("newRaceOrderId", newRaceOrderId);
-				order.setOrderId(newRaceOrderId);
-				userService.updateRaceOrderId(parms);
+//				String newRaceOrderId = "BM"+now+r.getCompetitionNo();
+//				parms.put("orderId", order.getOrderId());
+//				parms.put("newRaceOrderId", newRaceOrderId);
+//				order.setOrderId(newRaceOrderId);
+//				userService.updateRaceOrderId(parms);
 				if(Constants.CHINA.equals(personal.getNationality()) || Constants.TAIBEI.equals(personal.getNationality())
 						|| Constants.HONGKONG.equals(personal.getNationality()) || Constants.MACAO.equals(personal.getNationality())){
 					

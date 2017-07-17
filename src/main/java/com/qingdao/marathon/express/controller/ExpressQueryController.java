@@ -84,7 +84,7 @@ public class ExpressQueryController {
     public static void main(String[] args) {
     	ExpressQueryController api = new ExpressQueryController();
         try {
-            String result = api.getOrderTracesByJson("ANE", "210001633605");
+            String result = api.getOrderTracesByJson("YD", "3841160557387");
             System.out.print(result.toLowerCase());
 //            JSONObject jsonObj = JSONObject.fromObject(result.toLowerCase());
 //            Map<String,Class> classMap = new HashMap<String,Class>();
