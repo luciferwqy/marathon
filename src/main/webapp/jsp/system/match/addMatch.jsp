@@ -44,7 +44,7 @@
 									</div>
 	
 									<div class="form-group">
-										<label>赛事开始时间:</label>
+										<label>报名开始时间:</label>
 										<div class="input-group input-append date form_datetime"> 
 										 <input size="18" class="form-control dataPicker" format="yyyy-mm-dd hh:ii" minView="hour" readonly="readonly" id="startTime" name="startTime">
 										 <span class="input-group-addon add-on"><i class="fa fa-calendar fa-fw"></i></span>

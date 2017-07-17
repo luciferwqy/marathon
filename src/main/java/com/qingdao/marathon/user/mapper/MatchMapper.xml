@@ -22,7 +22,7 @@
 	<select id="queryList" resultMap="BaseResultMap">
 		select * from `match` where 1=1 
 		<if test="type != null">
-			and regDeadline > now() and state='0'
+			and regDeadline > now() and state='0' and startTime &lt; now()
 		</if>
 		
 	</select>
