@@ -34,6 +34,7 @@ import com.qingdao.marathon.system.model.DrawEntity;
 import com.qingdao.marathon.system.model.MatchEntity;
 import com.qingdao.marathon.system.model.MatchGroupEntity;
 import com.qingdao.marathon.system.model.Operator;
+import com.qingdao.marathon.system.model.ParticipantEntity;
 import com.qingdao.marathon.system.service.MatchGroupMngService;
 import com.qingdao.marathon.system.service.ReviewMngService;
 import com.qingdao.marathon.user.model.Registration;
@@ -252,6 +253,72 @@ public class ReviewMngController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			sysLogger.error(LoggerConstants.SYS_LOGGER, "导入报表出错", e);
+		}
+	}
+	
+	@RequestMapping(value = "/participantExport")
+	public ModelAndView participantExport(HttpServletRequest req, HttpServletResponse resp) {
+		// 返回数据类型
+		Map<String, Object> context = getRootMap();
+		String privilege = req.getParameter("privilege");
+		context.put("privilege", privilege);
+		
+		Map<String,Object> parms = new HashMap<String,Object>();
+		parms.put("matchId", "");
+		List<MatchGroupEntity> match = matchGroupMngService.queryGroupByParams(parms);
+		context.put("matchs", match);
+		return forword("system/review/participantExport", context);
+	}
+	
+	@RequestMapping(value = "/exportDataList", method = RequestMethod.POST)
+	@ResponseBody
+	public PageCallBack exportDataList(Pagination pagination, HttpServletRequest req, HttpServletResponse resp) {
+		PageCallBack pcb = new PageCallBack();
+		try {
+			String groupId = req.getParameter("groupId");
+			Map<String,Object> parms = new HashMap<String,Object>();
+			parms.put("groupId", groupId);
+			Page<ParticipantEntity> matchPage = reviewMngService.queryParticipant(pagination,parms,true);
+			pcb.setPagination(webPageConverter(matchPage));
+			pcb.setObj(matchPage);
+			pcb.setSuccess(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+			sysLogger.error(LoggerConstants.SYS_LOGGER, "查询功能模块出错", e);
+			pcb.setErrTrace(e.getMessage());
+			pcb.setSuccess(false);
+		}
+
+		return pcb;
+	}
+	
+	@RequestMapping("/participantExportReport")
+	public void participantExportReport(HttpServletRequest req,HttpServletResponse resp){
+		String[] nameArray = null;
+		String[] colArray = null;
+		WebApplicationContext webApplicationContext = ContextLoader.getCurrentWebApplicationContext();
+		ServletContext servletContext = webApplicationContext.getServletContext();
+		String filePath = servletContext.getRealPath("/") + "DL/Export/participantModel.xlsx";
+		System.out.println(filePath);
+		try {
+			String groupId = req.getParameter("groupId");
+			Map<String,Object> parms = new HashMap<String,Object>();
+			parms.put("groupId", groupId);
+
+			List<ParticipantEntity> participantList = reviewMngService.queryParticipantForExport(parms);
+			nameArray = new String[]{"赛事名称","组别名称","参赛者姓名","参赛者证件号","参赛编号","联系电话","邮箱地址"};
+			colArray = new String[]{"MatchName","GroupName","Name","IDNumber","CompetitionNo","MobilPhone","Email"};
+			int index = 0;//表中行号
+			int sheetNum = 1;//工作表号
+			String sheetName = "sheet"+sheetNum;//工作表名
+			SXSSFWorkbook swb = new SXSSFWorkbook(100);
+			ExcelUtil.createExcel(participantList, nameArray, colArray, filePath, index, sheetName, swb);
+			ExcelUtil.writeToExcel(swb, filePath);
+			sendSuccessMessage(resp, filePath);
+			//FileDownloadUtil.downloadFile(req, resp, new File(filePath));
+		} catch (Exception e) {
+			e.printStackTrace();
+			sysLogger.error(LoggerConstants.SYS_LOGGER, "导出报表出错", e);
 		}
 	}
 }

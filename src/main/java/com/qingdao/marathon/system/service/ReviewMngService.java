@@ -9,6 +9,7 @@ import com.qingdao.marathon.system.model.AchievementEntity;
 import com.qingdao.marathon.system.model.DrawEntity;
 import com.qingdao.marathon.system.model.MatchEntity;
 import com.qingdao.marathon.system.model.MatchGroupEntity;
+import com.qingdao.marathon.system.model.ParticipantEntity;
 import com.qingdao.marathon.user.model.Registration;
 
 /**
@@ -26,6 +27,20 @@ public interface ReviewMngService {
 	 * @return
 	 */
 	public Page<DrawEntity> queryDraw(Pagination pagination,Map<String,Object> parms,boolean flag);
+	
+	/**
+	 * 查询主功能模块
+	 * @param pagination
+	 * @return
+	 */
+	public Page<ParticipantEntity> queryParticipant(Pagination pagination,Map<String,Object> parms,boolean flag);
+	
+	/**
+	 * 查询主功能模块
+	 * @param Map<String,Object>
+	 * @return
+	 */
+	public List<ParticipantEntity> queryParticipantForExport(Map<String,Object> parms);
 	
 //	/**
 //	 * 根据条件查询功能实体

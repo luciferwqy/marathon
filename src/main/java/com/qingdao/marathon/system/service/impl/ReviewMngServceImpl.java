@@ -17,6 +17,7 @@ import com.qingdao.marathon.system.model.AchievementEntity;
 import com.qingdao.marathon.system.model.DrawEntity;
 import com.qingdao.marathon.system.model.MatchEntity;
 import com.qingdao.marathon.system.model.MatchGroupEntity;
+import com.qingdao.marathon.system.model.ParticipantEntity;
 import com.qingdao.marathon.system.service.MatchGroupMngService;
 import com.qingdao.marathon.system.service.ReviewMngService;
 import com.qingdao.marathon.user.model.Registration;
@@ -42,6 +43,17 @@ public class ReviewMngServceImpl implements ReviewMngService {
 	public Page<DrawEntity> queryDraw(Pagination pagination,Map<String,Object> parms,boolean flag) {
 		PageHelper.startPage(pagination.getCurrentPage(), pagination.getNumPerPage(), flag);
 		return reviewMngMapper.queryDraw(parms);
+	}
+
+	@Override
+	public Page<ParticipantEntity> queryParticipant(Pagination pagination,Map<String,Object> parms,boolean flag) {
+		PageHelper.startPage(pagination.getCurrentPage(), pagination.getNumPerPage(), flag);
+		return reviewMngMapper.queryParticipant(parms);
+	}
+
+	@Override
+	public List<ParticipantEntity> queryParticipantForExport(Map<String,Object> parms) {
+		return reviewMngMapper.queryParticipantForExport(parms);
 	}
 
 //	@Override

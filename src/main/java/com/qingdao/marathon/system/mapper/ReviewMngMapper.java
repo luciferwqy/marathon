@@ -8,6 +8,7 @@ import com.qingdao.marathon.base.BaseMapper;
 import com.qingdao.marathon.system.model.AchievementEntity;
 import com.qingdao.marathon.system.model.AuthInfo;
 import com.qingdao.marathon.system.model.MatchGroupEntity;
+import com.qingdao.marathon.system.model.ParticipantEntity;
 import com.qingdao.marathon.user.model.Registration;
 
 /**
@@ -28,6 +29,10 @@ public interface ReviewMngMapper<T> extends BaseMapper<T> {
 	List<AuthInfo> queryAllFunc();
 	
 	public Page<T> queryDraw(Map<String,Object> parms);
+	
+	public Page<T> queryParticipant(Map<String,Object> parms);
+	
+	public List<ParticipantEntity> queryParticipantForExport(Map<String,Object> parms);
 	
 	public MatchGroupEntity queryByParams(Map<String,Object> parms);
 	

@@ -38,6 +38,19 @@
 		<result column="name" property="name" />
 		<result column="account" property="account" />
 	</resultMap>
+
+	<!-- resultMap -->
+	<resultMap type="com.qingdao.marathon.system.model.ParticipantEntity" id="participantEntity">
+		<result column="matchId" property="matchId" />
+		<result column="matchName" property="matchName" />
+		<result column="groupId" property="groupId" />
+		<result column="groupName" property="groupName" />
+		<result column="mobilPhone" property="mobilPhone" />
+		<result column="competitionNo" property="competitionNo" />
+		<result column="IDNumber" property="IDNumber" />
+		<result column="email" property="email" />
+		<result column="name" property="name" />
+	</resultMap>
 	
 	<insert id="add" useGeneratedKeys="true" keyProperty="groupId"
 		parameterType="Object">
@@ -127,5 +140,37 @@
 		select a.* from marathon.`registration` a
 		where a.groupId = #{groupId} and a.auditState = '0'
 		order by createtime
+	</select>
+
+	<select id="queryParticipant" resultMap="participantEntity">
+		select a.matchId,b.matchName,a.groupId,a.groupName,d.name,
+		c.competitionNo,d.mobilPhone,d.IDNumber,d.email
+		from matchgroup a
+		inner join marathon.`match` b on a.matchId=b.matchId
+		inner join registration c on 
+		b.matchId = c.matchId and a.groupId = c.groupId
+		and c.competitionNo is not null and c.payState = '1'
+		inner join personalinfo d on c.account = d.account
+		where 1=1
+		<if test="groupId != null and groupId != ''">
+			and a.groupid = #{groupId}
+		</if>
+		order by a.matchId,a.groupId,c.competitionNo
+	</select>
+
+	<select id="queryParticipantForExport" resultMap="participantEntity">
+		select a.matchId,b.matchName,a.groupId,a.groupName,d.name,
+		c.competitionNo,d.mobilPhone,d.IDNumber,d.email
+		from matchgroup a
+		inner join marathon.`match` b on a.matchId=b.matchId
+		inner join registration c on 
+		b.matchId = c.matchId and a.groupId = c.groupId
+		and c.competitionNo is not null and c.payState = '1'
+		inner join personalinfo d on c.account = d.account
+		where 1=1
+		<if test="groupId != null and groupId != ''">
+			and a.groupid = #{groupId}
+		</if>
+		order by a.matchId,a.groupId,c.competitionNo
 	</select>
 </mapper>
