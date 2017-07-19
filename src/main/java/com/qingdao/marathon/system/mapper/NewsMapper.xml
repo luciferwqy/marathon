@@ -20,6 +20,7 @@
 		<if test="lang != null and lang != ''">
 			and lang = #{lang}
 		</if>
+		order by createtime desc 
 		limit #{start} ,#{end}
 	</select>
 	
