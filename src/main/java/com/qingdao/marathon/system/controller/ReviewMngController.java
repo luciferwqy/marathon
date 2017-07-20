@@ -1,6 +1,7 @@
 package com.qingdao.marathon.system.controller;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +38,9 @@ import com.qingdao.marathon.system.model.Operator;
 import com.qingdao.marathon.system.model.ParticipantEntity;
 import com.qingdao.marathon.system.service.MatchGroupMngService;
 import com.qingdao.marathon.system.service.ReviewMngService;
+import com.qingdao.marathon.user.model.PersonalInfo;
 import com.qingdao.marathon.user.model.Registration;
+import com.qingdao.marathon.user.service.UserService;
 import com.qingdao.marathon.util.DateUtil;
 import com.qingdao.marathon.util.ExcelUtil;
 import com.qingdao.marathon.util.FileDownloadUtil;
@@ -53,6 +56,9 @@ public class ReviewMngController extends BaseController {
 	@Resource
 	MatchGroupMngService matchGroupMngService;
 
+	@Resource
+	UserService userService;
+	
 	@Resource
 	SysLogger sysLogger;
 
@@ -320,5 +326,23 @@ public class ReviewMngController extends BaseController {
 			e.printStackTrace();
 			sysLogger.error(LoggerConstants.SYS_LOGGER, "导出报表出错", e);
 		}
+	}
+	
+	@RequestMapping("/searchPerson")
+	public ModelAndView searchPerson(HttpServletRequest req, HttpServletResponse resp){
+		// 返回数据类型
+		Map<String, Object> context = getRootMap();
+		try {
+			String account = new String(req.getParameter("account").getBytes("8859_1"), "utf8");
+			//String account = req.getParameter("account");
+			PersonalInfo info = userService.checkAccount(account);
+			context.put("info", info);
+			return forword("system/review/searchPerson", context);
+		} catch (Exception e) {
+			e.printStackTrace();
+			sysLogger.error(LoggerConstants.SYS_LOGGER, "功能模块出错", e);
+			return forword("/error", context);
+		}
+		
 	}
 }

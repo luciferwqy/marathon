@@ -87,6 +87,23 @@
 			</div>
 			</div>
 		</div>
+		
+	<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-hidden="true">
+	   <div class="modal-dialog" >
+	      <div class="modal-content">
+	         <div class="modal-header">
+	            <button type="button" class="close"  aria-hidden="true" onclick="closeEditModal()">&times;</button>
+	         	<h4 class="modal-title" id="modelTitle">查看信息</h4>
+	         </div>
+	         <div class="modal-body"  >
+	         <iframe id="editIFrame" width="100%" height="100%" frameborder="0" scrolling="auto"></iframe>
+	         </div>
+	         <div class="modal-footer">
+	            <button type="button" class="btn btn-danger" onclick="closeEditModal()">关闭 </button>
+	         </div>
+	      </div>
+		</div>
+	</div>
 <script type="text/javascript">
 
 	var options=$("#groupId option:selected");
@@ -147,22 +164,22 @@
    			}
    	  		str += "</td><td>" + strCom;
    	  		strCom = list[i].matchId+"&"+list[i].groupId+"&"+list[i].account+"&"+list[i].name;
-   	  		switch (list[i].auditState) {
+			str += "</td><td><button type='button' class='btn btn-primary' onclick='showEditModal(\""+list[i].account+"\")'>查看信息</button>" ;
+   	  		/*switch (list[i].auditState) {
 			case "0":
 				str += "</td><td>" ;
 				break;
 			case "1":
 				switch (list[i].payState) {
 	   			case "0":
-					str += "</td><td>" ;
-					//str += "</td><td><button type='button' class='btn btn-primary' onclick='postReviewCancel(\""+strCom+"\")'>取消资格</button>";
+					str += "</td><td><button type='button' class='btn btn-primary' onclick='postReviewCancel(\""+strCom+"\")'>取消资格</button>";
 	   				break;
 	   			case "1":
 					str += "</td><td>" ;
 	   				break;
 	   			}
 				break;
-			}
+			}*/
 			str += "</td></tr>";
 		}
 		$("#reviewTable tbody").html(str);	
@@ -225,6 +242,17 @@
 			});
 		})
 	 }
+	
+	function showEditModal(value){
+        var frameSrc = '${marathon}/admin/system/reviewMng/searchPerson.shtml?account='+value;
+		$("#editIFrame").attr("src", frameSrc); 
+		$('#editModal').modal({ show: true, backdrop: 'static' });
+	}
+
+	function closeEditModal(){
+		$("#editIFrame").attr("src", "");
+		$("#editModal").modal("hide");
+	}
 	
 	function postReviewCancel(value){
 		alert("功能开发中...");
