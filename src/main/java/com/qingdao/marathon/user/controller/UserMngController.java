@@ -33,32 +33,32 @@ import com.qingdao.marathon.util.SessionUtils;
 import com.qingdao.marathon.util.URLUtils;
 
 @Controller
-public class UserMngController extends BaseController{
+public class UserMngController extends BaseController {
 
 	@Resource
 	UserService userService;
-	
+
 	private final String localPath = "upload/raceCertificate/";
-	
+
 	@RequestMapping("/user/checkAccount")
 	@ResponseBody
-	public ResultModel checkAccount(HttpServletRequest req,HttpServletResponse res){
+	public ResultModel checkAccount(HttpServletRequest req, HttpServletResponse res) {
 		ResultModel model = new ResultModel();
 		res.setHeader(Constants.CROSS_DOMAIN, Constants.DOMAIN_NAME);
 		String account = req.getParameter("account");
 		PersonalInfo info = userService.checkAccount(account);
-		if(info == null){
+		if (info == null) {
 			model.setSuccess(true);
-		}else{
+		} else {
 			model.setSuccess(false);
 			model.setMsg("用户名已存在");
 		}
 		return model;
 	}
-	
+
 	@RequestMapping("/user/register")
 	@ResponseBody
-	public ResultModel register(HttpServletRequest req,HttpServletResponse res){
+	public ResultModel register(HttpServletRequest req, HttpServletResponse res) {
 		ResultModel model = new ResultModel();
 		res.setHeader(Constants.CROSS_DOMAIN, req.getHeader("Origin"));
 		res.setHeader(Constants.CREDENTIALS, Constants.BOOLEAN);
@@ -66,24 +66,24 @@ public class UserMngController extends BaseController{
 		String pwd = req.getParameter("pwd");
 		String yzm = req.getParameter("yzm");
 		String serverYzm = SessionUtils.getValidateCode(req) == null ? "" : SessionUtils.getValidateCode(req);
-		if(serverYzm.equalsIgnoreCase(yzm)){
+		if (serverYzm.equalsIgnoreCase(yzm)) {
 			boolean result = userService.register(account, pwd);
-			if(result){
+			if (result) {
 				model.setSuccess(true);
-			}else{
+			} else {
 				model.setSuccess(false);
 				model.setMsg("网络出现异常");
 			}
-		}else{
+		} else {
 			model.setMsg("验证码错误");
 			model.setSuccess(false);
 		}
 		return model;
 	}
-	
+
 	@RequestMapping("/user/login")
 	@ResponseBody
-	public ResultModel login(HttpServletRequest req,HttpServletResponse res){
+	public ResultModel login(HttpServletRequest req, HttpServletResponse res) {
 		ResultModel model = new ResultModel();
 		res.setHeader(Constants.CROSS_DOMAIN, req.getHeader("Origin"));
 		res.setHeader(Constants.CREDENTIALS, Constants.BOOLEAN);
@@ -91,33 +91,33 @@ public class UserMngController extends BaseController{
 		String pwd = req.getParameter("pwd");
 		String yzm = req.getParameter("yzm");
 		String serverYzm = SessionUtils.getValidateCode(req) == null ? "" : SessionUtils.getValidateCode(req);
-		if(serverYzm.equalsIgnoreCase(yzm) || yzm==null){
+		if (serverYzm.equalsIgnoreCase(yzm) || yzm == null) {
 			PersonalInfo info = userService.login(account, pwd);
-			if(info == null){
+			if (info == null) {
 				model.setSuccess(false);
 				model.setMsg("用户名或者密码错误");
-			}else{
+			} else {
 				model.setSuccess(true);
 			}
-		}else{
+		} else {
 			model.setMsg("验证码错误");
 			model.setSuccess(false);
 		}
 		return model;
 	}
-	
+
 	@RequestMapping("/user/logout")
 	@ResponseBody
-	public ResultModel logout(HttpServletRequest req,HttpServletResponse res){
+	public ResultModel logout(HttpServletRequest req, HttpServletResponse res) {
 		ResultModel model = new ResultModel();
 		res.setHeader(Constants.CROSS_DOMAIN, Constants.DOMAIN_NAME);
 		model.setSuccess(true);
 		return model;
 	}
-	
+
 	@RequestMapping("/user/getUserInfo")
 	@ResponseBody
-	public ResultModel getUserInfo(HttpServletRequest req,HttpServletResponse res){
+	public ResultModel getUserInfo(HttpServletRequest req, HttpServletResponse res) {
 		ResultModel model = new ResultModel();
 		res.setHeader(Constants.CROSS_DOMAIN, Constants.DOMAIN_NAME);
 		String account = req.getParameter("account");
@@ -132,27 +132,26 @@ public class UserMngController extends BaseController{
 		}
 		return model;
 	}
-	
-	
+
 	@RequestMapping("/user/updateInfo")
 	@ResponseBody
-	public ResultModel updateInfo(PersonalInfo info,HttpServletRequest req,HttpServletResponse res){
+	public ResultModel updateInfo(PersonalInfo info, HttpServletRequest req, HttpServletResponse res) {
 		ResultModel model = new ResultModel();
 		res.setHeader(Constants.CROSS_DOMAIN, Constants.DOMAIN_NAME);
 		boolean result = userService.updateInfo(info);
-		if(result){
+		if (result) {
 			model.setSuccess(true);
-		}else{
+		} else {
 			model.setSuccess(false);
 			model.setMsg("网络异常");
 		}
 		return model;
 	}
-	
-	
+
 	@RequestMapping(value = "/uploadRaceFile", method = RequestMethod.POST)
 	@ResponseBody
-	public ResultModel uploadDeclFile(@RequestParam("raceFile") MultipartFile raceFile, HttpServletRequest req, HttpServletResponse res) throws Exception {
+	public ResultModel uploadDeclFile(@RequestParam("raceFile") MultipartFile raceFile, HttpServletRequest req,
+			HttpServletResponse res) throws Exception {
 		ResultModel model = new ResultModel();
 		String account = req.getParameter("account");
 		res.setHeader(Constants.CROSS_DOMAIN, Constants.DOMAIN_NAME);
@@ -163,7 +162,7 @@ public class UserMngController extends BaseController{
 				model.setMsg("请使用PNG或JPG格式");
 				return model;
 			}
-			fileName = System.currentTimeMillis()+".jpg";
+			fileName = System.currentTimeMillis() + ".jpg";
 			String newPath = localPath + account + "/";
 
 			String filePath = req.getSession().getServletContext().getRealPath("/") + newPath + fileName;
@@ -177,14 +176,14 @@ public class UserMngController extends BaseController{
 
 			MarathonRace race = new MarathonRace();
 			race.setAccount(account);
-			race.setCertificatePath(URLUtils.get("marathon")+"/"+ newPath + fileName);
+			race.setCertificatePath(URLUtils.get("marathon") + "/" + newPath + fileName);
 
 			boolean result = userService.addMarathonRace(race);
 
-			if(result){
+			if (result) {
 				model.setSuccess(true);
 				return model;
-			}else{
+			} else {
 				model.setSuccess(false);
 				model.setMsg("网络异常");
 				return model;
@@ -195,15 +194,15 @@ public class UserMngController extends BaseController{
 			return model;
 		}
 	}
-	
+
 	@RequestMapping("/user/getMatch")
 	@ResponseBody
-	public ResultModel getMatch(HttpServletRequest req,HttpServletResponse res){
+	public ResultModel getMatch(HttpServletRequest req, HttpServletResponse res) {
 		ResultModel model = new ResultModel();
 		res.setHeader(Constants.CROSS_DOMAIN, Constants.DOMAIN_NAME);
 		String type = req.getParameter("type");
 		try {
-			Map<String,Object> parms = new HashMap<String,Object>();
+			Map<String, Object> parms = new HashMap<String, Object>();
 			parms.put("type", type);
 			List<MatchInfo> list = userService.queryMatchList(parms);
 			model.setSuccess(true);
@@ -216,10 +215,10 @@ public class UserMngController extends BaseController{
 			return model;
 		}
 	}
-	
+
 	@RequestMapping("/user/getGroup")
 	@ResponseBody
-	public ResultModel getGroup(HttpServletRequest req,HttpServletResponse res){
+	public ResultModel getGroup(HttpServletRequest req, HttpServletResponse res) {
 		ResultModel model = new ResultModel();
 		res.setHeader(Constants.CROSS_DOMAIN, Constants.DOMAIN_NAME);
 		String matchId = req.getParameter("matchId");
@@ -235,10 +234,10 @@ public class UserMngController extends BaseController{
 			return model;
 		}
 	}
-	
+
 	@RequestMapping("/user/addReceive")
 	@ResponseBody
-	public ResultModel addReceive(ReceiveInfo info,HttpServletRequest req,HttpServletResponse res){
+	public ResultModel addReceive(ReceiveInfo info, HttpServletRequest req, HttpServletResponse res) {
 		ResultModel model = new ResultModel();
 		res.setHeader(Constants.CROSS_DOMAIN, Constants.DOMAIN_NAME);
 		try {
@@ -252,10 +251,10 @@ public class UserMngController extends BaseController{
 		}
 		return model;
 	}
-	
+
 	@RequestMapping("/user/getReceive")
 	@ResponseBody
-	public ResultModel getReceive(HttpServletRequest req,HttpServletResponse res){
+	public ResultModel getReceive(HttpServletRequest req, HttpServletResponse res) {
 		ResultModel model = new ResultModel();
 		res.setHeader(Constants.CROSS_DOMAIN, Constants.DOMAIN_NAME);
 		String account = req.getParameter("account");
@@ -270,13 +269,13 @@ public class UserMngController extends BaseController{
 		}
 		return model;
 	}
-	
+
 	@RequestMapping("/user/addOrder")
 	@ResponseBody
-	public ResultModel addOrder(OrderInfo info,HttpServletRequest req,HttpServletResponse res){
+	public ResultModel addOrder(OrderInfo info, HttpServletRequest req, HttpServletResponse res) {
 		ResultModel model = new ResultModel();
 		res.setHeader(Constants.CROSS_DOMAIN, Constants.DOMAIN_NAME);
-		String orderId = "SP"+System.currentTimeMillis();
+		String orderId = "SP" + System.currentTimeMillis();
 		info.setOrderId(orderId);
 		try {
 			userService.addOrder(info);
@@ -289,10 +288,10 @@ public class UserMngController extends BaseController{
 		}
 		return model;
 	}
-	
+
 	@RequestMapping("/user/getOrder")
 	@ResponseBody
-	public ResultModel getOrder(HttpServletRequest req,HttpServletResponse res){
+	public ResultModel getOrder(HttpServletRequest req, HttpServletResponse res) {
 		ResultModel model = new ResultModel();
 		res.setHeader(Constants.CROSS_DOMAIN, Constants.DOMAIN_NAME);
 		String account = req.getParameter("account");
@@ -307,19 +306,19 @@ public class UserMngController extends BaseController{
 		}
 		return model;
 	}
-	
+
 	@RequestMapping("/user/isPay")
 	@ResponseBody
-	public ResultModel isPay(HttpServletRequest req,HttpServletResponse res){
+	public ResultModel isPay(HttpServletRequest req, HttpServletResponse res) {
 		ResultModel model = new ResultModel();
 		res.setHeader(Constants.CROSS_DOMAIN, Constants.DOMAIN_NAME);
 		String orderId = req.getParameter("orderId");
 		try {
-			if(orderId == null){
+			if (orderId == null) {
 				model.setMsg("没有订单号");
 				model.setSuccess(false);
 				return model;
-			}else {
+			} else {
 				boolean flag = userService.ispay(orderId);
 				model.setSuccess(flag);
 			}
@@ -330,16 +329,16 @@ public class UserMngController extends BaseController{
 		}
 		return model;
 	}
-	
+
 	@RequestMapping("/user/getRegistration")
 	@ResponseBody
-	public ResultModel getRegistration(HttpServletRequest req,HttpServletResponse res){
+	public ResultModel getRegistration(HttpServletRequest req, HttpServletResponse res) {
 		ResultModel model = new ResultModel();
 		res.setHeader(Constants.CROSS_DOMAIN, Constants.DOMAIN_NAME);
 		String account = req.getParameter("account");
 		String matchId = req.getParameter("matchId");
 		String competitionNo = req.getParameter("competitionNo");
-		Map<String,Object> parms = new HashMap<String,Object>();
+		Map<String, Object> parms = new HashMap<String, Object>();
 		parms.put("account", account);
 		parms.put("matchId", matchId);
 		parms.put("competitionNo", competitionNo);
@@ -354,28 +353,42 @@ public class UserMngController extends BaseController{
 		}
 		return model;
 	}
-	
+
 	@RequestMapping("/user/addRegistration")
 	@ResponseBody
-	public ResultModel addRegistration(Registration info,HttpServletRequest req,HttpServletResponse res){
+	public ResultModel addRegistration(Registration info, HttpServletRequest req, HttpServletResponse res) {
 		ResultModel model = new ResultModel();
 		res.setHeader(Constants.CROSS_DOMAIN, Constants.DOMAIN_NAME);
 		try {
 			PersonalInfo personal = userService.getUserInfo(info.getAccount());
-			boolean flag = MarathonUtil.checkObjFieldIsNull(personal);
-			if(flag){
+			if (personal != null) {
+				boolean flag = MarathonUtil.checkObjFieldIsNull(personal);
+				if (flag) {
+					model.setSuccess(false);
+					model.setMsg("请先把个人信息全部完善，谢谢");
+					return model;
+				}
+				if (info.getGroupName().contains("全程")) {
+					if (personal.getRace() == null || personal.getRace().getCertificatePath() == null
+							|| "".equals(personal.getRace().getCertificatePath())) {
+						model.setSuccess(false);
+						model.setMsg("之前没有参加过马拉松比赛的不能参加全程，请选择其他组别");
+						return model;
+					}
+				}
+				userService.addRegistration(info);
+				model.setSuccess(true);
+				model.setObj(info);
+			} else {
 				model.setSuccess(false);
-				model.setMsg("请先把个人信息全部完善，谢谢");
+				model.setMsg("请确认账号是否正确");
 				return model;
 			}
-			userService.addRegistration(info);
-			model.setSuccess(true);
-			model.setObj(info);
 		} catch (Exception e) {
-			if(e.getMessage().contains("PRIMARY")){
+			if (e.getMessage().contains("PRIMARY")) {
 				model.setSuccess(false);
 				model.setMsg("已经报名该赛事");
-			}else{
+			} else {
 				model.setSuccess(false);
 				model.setMsg("网络异常");
 				e.printStackTrace();
