@@ -224,7 +224,8 @@
 				url:'${marathon}/admin/system/reviewMng/drawNum.shtml',
 				data:{
 					"drawNum":drawNum,
-					"groupId":groupId
+					"groupId":groupId,
+					"groupName":groupName
 					},
 				dataType:'json',
 				success:function(result){

@@ -103,6 +103,18 @@ public class ReviewMngController extends BaseController {
 		try {
 			String drawNum = req.getParameter("drawNum");
 			String groupId = req.getParameter("groupId");
+			String groupName = req.getParameter("groupName");
+			//从组别名称中找出字母用于产生参赛号
+			if(groupName!=null &&!"".equals(groupName)) {
+				groupName = groupName.replaceAll("[^A-Z]", "");
+				if (groupName.length()!=1) {
+					sendFailureMessage(resp, "组别名称不符合抽取规则，请确认");
+					return;
+				}
+			} else {
+				sendFailureMessage(resp, "组别名称不符合抽取规则，请确认");
+				return;
+			}
 			//判断组别是否已经抽取过参赛人数
 			MatchGroupEntity groupEntity = matchGroupMngService.queryById(groupId);
 			if (null != groupEntity.getHasDraw() && !"".equals(groupEntity.getHasDraw()) && !"null".equals(groupEntity.getHasDraw())) {
@@ -126,7 +138,8 @@ public class ReviewMngController extends BaseController {
 						int index = 1;
 						for(Registration reg :registration) {
 							reg.setAuditState("1");
-							reg.setCompetitionNo(groupId+df2.format(index).toString());
+							//reg.setCompetitionNo(groupId+df2.format(index).toString());
+							reg.setCompetitionNo(groupName+df2.format(index).toString());
 							reg.setRaceOrderId("BM"+now+df2.format(index).toString());
 							index++;
 						}
@@ -137,7 +150,8 @@ public class ReviewMngController extends BaseController {
 						int random = (int) (Math.random() * registration.size()-1);
 						Registration reg = registration.get(random);
 						reg.setAuditState("1");
-						reg.setCompetitionNo(groupId+df2.format(i).toString());
+						//reg.setCompetitionNo(groupId+df2.format(i).toString());
+						reg.setCompetitionNo(groupName+df2.format(i).toString());
 						reg.setRaceOrderId("BM"+now+df2.format(i).toString());
 						drawRegistration.add(reg);
 						registration.remove(random);
