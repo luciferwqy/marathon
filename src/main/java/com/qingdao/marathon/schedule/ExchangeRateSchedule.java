@@ -21,7 +21,7 @@ public class ExchangeRateSchedule {
 
 	@Scheduled(cron = "0 0 1 * * ?")
 	public void getRate() throws Exception {
-        URL u=new URL("http://api.k780.com:88/?app=finance.rate&scur=USD&tcur=CNY&appkey=24585&sign=fa5f04d314635156270e40a1375419e8&format=xml");
+        URL u=new URL("http://api.k780.com/?app=finance.rate&scur=USD&tcur=CNY&appkey=24585&sign=fa5f04d314635156270e40a1375419e8&format=xml");
         InputStream in=u.openStream();
         ByteArrayOutputStream out=new ByteArrayOutputStream();
         try {

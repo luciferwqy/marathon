@@ -10,7 +10,7 @@ public class WXConfig {
 	
 	public static final String API_KEY = "mnbvcxzlkjhgfdsapoiuytrewq032701";
 	//发起电脑IP
-	public static final String CREATE_IP = "120.27.225.133";
+	public static final String CREATE_IP = "116.62.235.32";
 	
 //	public static final String CREATE_IP = "121.196.229.214";
 	
