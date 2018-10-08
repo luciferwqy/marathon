@@ -16,7 +16,7 @@ public class Constants {
 	
 	public static final String CROSS_DOMAIN = "Access-Control-Allow-Origin";//解决ajax跨域请求
 	
-	public static final String DOMAIN_NAME = "http://index.qingdaomarathon.org";//允许跨域的域名
+	public static final String DOMAIN_NAME = "http://www.qingdaomarathon.org";//允许跨域的域名
 	
 	public static final String BOOLEAN = "true";//
 	
