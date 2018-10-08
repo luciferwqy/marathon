@@ -30,5 +30,10 @@ public class MarathonRace {
 	public void setCertificatePath(String certificatePath) {
 		this.certificatePath = certificatePath;
 	}
+	@Override
+	public String toString() {
+		return "MarathonRace [account=" + account + ", marathonName=" + marathonName + ", achievement=" + achievement
+				+ ", certificatePath=" + certificatePath + "]";
+	}
 	
 }
